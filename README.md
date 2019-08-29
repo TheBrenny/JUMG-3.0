@@ -13,7 +13,8 @@
 JUMG (pronounced 'Jum-Gee', acronymed 'Java Utilities for Making Games') is a library that contains multiple utilities to make Java Games the most efficient way. JUMG utilises the concepts of separating certain portions of code from the rest, to allow one main class to bring them altogether.
 
 As JUMG is in development, it is necessary for a checklist to be made of what needs to be added, and what is added. This is here for simplicity's sake:
-<br>**JUMG Development Checklist:**
+<br>
+**JUMG Development Checklist:**
  1. [x] File IO (using custom protocols)
  2. [x] String Compression
  3. [x] Frame and Screen implementation
@@ -34,9 +35,11 @@ As JUMG is in development, it is necessary for a checklist to be made of what ne
  17. [ ] Networking
  18. [ ] Version control and updating
  19. [x] Startup Arguments
- 20. [ ] **Bulk Debugging Classes (currently working on...)**
+ 20. [ ] Bulk Debugging Classes
  21. [ ] Full JavaDocs
  22. [ ] RELEASE!
+
+_Currently I'm working on my project for Uni while I continue to work on JUMG. This is because my project depends on JUMG. As I work through, changes will occur and enhancements will be made, thus making the changes on this list seem eratic. Just bear with me._ :ok_hand: 
 
 #### Demo
 Check out the demo game which is a project for my Computer Games course at Uni, [BattleCell](https://github.com/TheBrenny/BattleCell)!
