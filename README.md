@@ -15,7 +15,7 @@ JUMG (pronounced 'Jum-Gee', acronymed 'Java Utilities for Making Games') is a li
 As JUMG is in development, it is necessary for a checklist to be made of what needs to be added, and what is added. This is here for simplicity's sake:
 <br>
 **JUMG Development Checklist:**
- 1. [x] File IO (using custom protocols)
+ 1. [x] Binary File IO (using custom protocols - so text can still be saved)
  2. [x] String Compression
  3. [x] Frame and Screen implementation
  4. [x] Graphical User Interface utilities *(will be continued as I go on...)*

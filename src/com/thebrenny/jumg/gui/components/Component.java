@@ -10,6 +10,7 @@ public abstract class Component extends Rectangle2D.Float {
 	protected boolean hovering;
 	protected boolean clicked;
 	protected boolean pressed;
+	// TODO: Make it so this has a "shouldUpdate" attribute, so we don't constantly recreate the image for no change.
 	
 	public Component(float x, float y) {
 		this(x, y, 0, 0, null);

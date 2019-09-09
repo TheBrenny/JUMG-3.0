@@ -45,7 +45,7 @@ public class MathUtil {
 	 * @param newLow
 	 *        The new low value
 	 * @param newHigh
-	 *        The new hgih value
+	 *        The new high value
 	 * @return The scaled {@code num} value.
 	 */
 	public static int map(int num, int oldLow, int oldHigh, int newLow, int newHigh) {

@@ -67,8 +67,7 @@ public class Level {
 		this.structures = new ArrayList<Structure>();
 		this.dayNightCycle = new DayNightCycle(0.0F);
 		
-		for(Structure s : g.getStructures())
-			addStructure(s);
+		for(Structure s : g.getStructures()) addStructure(s);
 		
 		calculateAllTiles();
 	}
@@ -554,10 +553,8 @@ public class Level {
 		//s.setLevel(this); // there's currently no "setLevel(Level) function.
 		//Level.ALL_ENTITIES_ON_MAP++; // No Structures counter either.
 		
-		for(Entity e : s.getEntities())
-			addEntity(e);
-		for(TileEntity te : s.getTileEntities())
-			addTileEntity(te);
+		for(Entity e : s.getEntities()) addEntity(e);
+		for(TileEntity te : s.getTileEntities()) addTileEntity(te);
 		
 		return this.getStructures().add(s);
 	}
@@ -677,7 +674,7 @@ public class Level {
 			for(int y = 0; y < chunkMap.getHeight(); y++) {
 				xx = x - tox;
 				yy = y - toy;
-				if(Screen.canCameraSeeChunk(xx, yy, camX, camY, camW, camH)) {
+				if(Screen.canCameraSeeChunk(xx, yy, camX, camY, camW, camH) && getChunk(x, y) != null) {
 					g2d.drawImage(getChunk(x, y).getImage(), (int) (xx * ds - camX), (int) (yy * ds - camY), ds, ds, null);
 					RENDERED_TILES += cs * cs;
 				}

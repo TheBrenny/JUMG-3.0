@@ -1,5 +1,8 @@
 package com.thebrenny.jumg.util;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -9,16 +12,16 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;
 
 public class Images {
-	public static HashMap<String,BufferedImage> imageMap = new HashMap<String,BufferedImage>();
+	public static HashMap<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
 	public static final BufferedImage NULL_IMAGE;
 	
 	public static void addImage(String location, String ... names) {
-		location = "/" + location.replace(".", "/")  + "/";
+		location = "/" + location.replace(".", "/") + "/";
 		for(String name : names) {
 			try {
 				imageMap.put(name, ImageIO.read(Images.class.getResourceAsStream(location + name + ".png")));
 				Logger.log("Registered image [" + name + ".png]");
-			} catch (Exception e) {
+			} catch(Exception e) {
 				Logger.log("Uh oh... There was an error trying to load the following Image:");
 				Logger.log("        Name: " + name + ".png");
 				Logger.log("    Location: " + location);
@@ -53,17 +56,30 @@ public class Images {
 		return image.getScaledInstance((int) newWidth, (int) newHeight, Image.SCALE_FAST);
 	}
 	public static Image encode(BufferedImage image, String encoding) {
-		Image im = new BufferedImage(image.getWidth(),image.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		Image im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		try {
 			ImageOutputStream ios = ImageIO.createImageOutputStream(im);
 			ImageIO.write(image, encoding, ios);
-		} catch (IOException e) {
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 		return im;
 	}
+	public static final BufferedImage recolour(BufferedImage bi, Color color) {
+		BufferedImage newBi = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		
+		Graphics2D g2d = newBi.createGraphics();
+		g2d.drawImage(bi, 0, 0, null);
+		g2d.setComposite(AlphaComposite.SrcAtop);
+		g2d.setColor(color);
+		g2d.fillRect(0, 0, newBi.getWidth(), newBi.getHeight());
+		g2d.dispose();
+		
+		return newBi;
+	}
+	
 	static {
-		NULL_IMAGE = new BufferedImage(1,1,BufferedImage.TYPE_INT_ARGB);
+		NULL_IMAGE = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		// I wanna set rendering hints so that it looks a little neater
 	}
 }
