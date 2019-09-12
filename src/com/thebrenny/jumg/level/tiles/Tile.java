@@ -42,6 +42,9 @@ public class Tile implements ITile {
 	public boolean isSolid() {
 		return isSolid;
 	}
+	public boolean canTraverseOnFoot() {
+		return !isSolid;
+	}
 	
 	public Tile setSolid(boolean solid) {
 		this.isSolid = solid;

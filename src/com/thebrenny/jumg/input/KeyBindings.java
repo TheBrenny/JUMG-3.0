@@ -9,7 +9,9 @@ import com.thebrenny.jumg.util.StringUtil;
 public class KeyBindings {
 	public static ArrayList<Thing> KEY_REGISTRY = new ArrayList<Thing>();
 	public static ArrayList<Thing> KEY_UNREGISTERED = new ArrayList<Thing>();
-	public static Point MOUSE_POINT = new Point(0,0);
+	public static Point MOUSE_POINT = new Point(0, 0);
+	
+	public static ArrayList<Thing> PRESSED_KEYS = new ArrayList<Thing>();
 	
 	public static Thing addKey(String name, int code, boolean toggles, boolean isKey) {
 		name = name.toLowerCase();
@@ -58,11 +60,30 @@ public class KeyBindings {
 	
 	public static boolean isPressed(String name) {
 		Thing k = getThingByName(name);
+		if(k != null && PRESSED_KEYS.contains(k)) PRESSED_KEYS.remove(k);
 		return k != null ? k.isPressed() : false;
 	}
 	public static boolean isPressed(int code) {
 		Thing k = getThingByCode(code);
+		if(k != null && PRESSED_KEYS.contains(k)) PRESSED_KEYS.remove(k);
 		return k != null ? k.isPressed() : false;
+	}
+	
+	public static boolean wasPressed(String name) {
+		Thing k = getThingByName(name);
+		if(k != null && PRESSED_KEYS.contains(k) && !k.isPressed()) {
+			PRESSED_KEYS.remove(k);
+			return true;
+		}
+		return false;
+	}
+	public static boolean wasPressed(int code) {
+		Thing k = getThingByCode(code);
+		if(k != null && PRESSED_KEYS.contains(k) && !k.isPressed()) {
+			PRESSED_KEYS.remove(k);
+			return true;
+		}
+		return false;
 	}
 	
 	public static boolean doesToggle(String name) {
@@ -119,6 +140,7 @@ public class KeyBindings {
 		}
 		public void press(boolean flag) {
 			this.isPressed = flag;
+			if(flag && !PRESSED_KEYS.contains(this)) PRESSED_KEYS.add(this);
 		}
 		public String toString() {
 			return getClass().getName() + "[Name{" + name + "},Code{" + code + "},IsPressed{" + isPressed + "}]";
@@ -158,6 +180,7 @@ public class KeyBindings {
 			super(name, mouseCode);
 		}
 	}
+	
 	public static void setMousePos(Point mouse) {
 		KeyBindings.MOUSE_POINT = mouse;
 	}

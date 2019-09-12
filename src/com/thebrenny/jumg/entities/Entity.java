@@ -1,6 +1,7 @@
 package com.thebrenny.jumg.entities;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -82,11 +83,17 @@ public abstract class Entity {
 	public float getY() {
 		return (float) this.boundingBox.getY();
 	}
+	public Point2D.Float getLocation() {
+		return new Point2D.Float(getX(), getY());
+	}
 	public float getAnchoredX() {
 		return this.getX() + this.anchorX;
 	}
 	public float getAnchoredY() {
 		return this.getY() + this.anchorY;
+	}
+	public Point2D.Float getAnchoredLocation() {
+		return new Point2D.Float(getAnchoredX(), getAnchoredY());
 	}
 	public float getTileX() {
 		return this.getX() / (float) Tile.TILE_SIZE;
@@ -94,11 +101,17 @@ public abstract class Entity {
 	public float getTileY() {
 		return this.getY() / (float) Tile.TILE_SIZE;
 	}
+	public Point2D.Float getTileLocation() {
+		return new Point2D.Float(getTileX(), getTileY());
+	}
 	public float getAnchoredTileX() {
 		return this.getAnchoredX() / (float) Tile.TILE_SIZE;
 	}
 	public float getAnchoredTileY() {
 		return this.getAnchoredY() / (float) Tile.TILE_SIZE;
+	}
+	public Point2D.Float getAnchoredTileLocation() {
+		return new Point2D.Float(getAnchoredTileX(), getAnchoredTileY());
 	}
 	public float getWidth() {
 		return (float) this.boundingBox.getWidth();
@@ -158,7 +171,8 @@ public abstract class Entity {
 		return false;
 	}
 	public boolean canSeeTile(float x, float y, float distance) {
-		return canSee(x, y, Tile.TILE_SIZE, Tile.TILE_SIZE, distance);
+		Point p = Level.roundTileCoords(x,y);
+		return canSee(p.x, p.y, Tile.TILE_SIZE, Tile.TILE_SIZE, distance);
 	}
 	public boolean canSeeEntity(Entity e, float distance) {
 		return canSee(e.getTileX(), e.getTileY(), e.getWidth(), e.getHeight(), distance);

@@ -5,6 +5,9 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 import com.thebrenny.jumg.entities.Entity;
 import com.thebrenny.jumg.entities.IHealable;
@@ -18,6 +21,7 @@ import com.thebrenny.jumg.util.Angle;
 import com.thebrenny.jumg.util.Angle.AngleSpeed;
 import com.thebrenny.jumg.util.Logger;
 import com.thebrenny.jumg.util.MathUtil;
+import com.thebrenny.jumg.util.VectorUtil;
 import com.thebrenny.jumg.util.VectorUtil.Ray;
 
 /**
@@ -99,6 +103,14 @@ public class Level {
 	 */
 	public Tile getTileRelative(int x, int y) {
 		return chunkMap.getTileRelative(x, y);
+	}
+	/**
+	 * Calls {@link Level#getTileRelative(int, int)} after converting the float
+	 * position to tile coordinates (through {@link Level#toTileCoords(int)}.
+	 */
+	public Tile getTileRelative(float x, float y) {
+		Point p = toTileCoords(x, y);
+		return getTileRelative(p.x, p.y);
 	}
 	
 	/**
@@ -210,8 +222,8 @@ public class Level {
 	
 	// See com.brennytizer.zombies.res.raycasting_test.js
 	public Ray castRay(Ray ray, int skip) {
-		if(ray.distance == 0) return ray;
 		ray = new Ray(ray); // duplicate so we don't fuck the original
+		if(ray.distance == 0) return ray;
 		
 		// Start prepping vars
 		//     Origin stuff
@@ -299,6 +311,81 @@ public class Level {
 	}
 	
 	/**
+	 * Determines if the two tiles are unobstructed, regardless of distance.
+	 * 
+	 * @param p1
+	 *        - The point identifying the first tile.
+	 * @param p2
+	 *        - The point identifying the second tile.
+	 * @return True if the two tiles are unobstructed.
+	 */
+	public boolean unobstructedTiles(Point2D.Float p1, Point.Float p2) {
+		p1 = VectorUtil.translatePoint(p1, 0F, 0F);
+		p2 = VectorUtil.translatePoint(p2, 0F, 0F);
+		
+		Point2D.Float defP1 = VectorUtil.toFloatPoint(p1);
+		Point2D.Float defP2 = VectorUtil.toFloatPoint(p2);
+		Ray r1, r2;
+		
+		for(int x = 0; x <= 1; x++) {
+			for(int y = 0; y <= 1; y++) {
+				p1 = VectorUtil.translatePoint(p1, x, y);
+				p2 = VectorUtil.translatePoint(p2, x, y);
+				
+				r1 = new Ray(p1, p2);
+				r2 = this.castRay(r1);
+				if(!r1.equals(r2)) return false;
+				
+				p1.setLocation(defP1);
+				p2.setLocation(defP2);
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Checks to see if each pair of points are unobstructed, regardless of
+	 * distance.
+	 * 
+	 * @param points
+	 *        - A Point array of a length that is a multiple of 2.
+	 * @return An array of booleans
+	 */
+	public boolean[] unobstructedTiles(Point2D.Float ... points) {
+		if(points.length % 2 != 0) {
+			Logger.log("OH NO! The points list passed wasn't even!");
+			return null;
+		}
+		
+		boolean[] ret = new boolean[points.length / 2];
+		
+		Point2D.Float p1, p2;
+		for(int i = 0; i < points.length; i += 2) {
+			p1 = points[i];
+			p2 = points[i + 1];
+			
+			ret[i / 2] = unobstructedTiles(p1, p2);
+		}
+		
+		return ret;
+	}
+	/**
+	 * Determines if the path is unobstructed. That is to say that all adjacent
+	 * tiles in the list are unobstructed.
+	 * 
+	 * @param points
+	 *        - The points of the tiles which make up the path.
+	 * @return Whether this path is unobstructed.
+	 */
+	public boolean unobstructedPath(Point2D.Float ... points) {
+		for(int i = 0; i < points.length - 1; i++) {
+			if(!unobstructedTiles(points[i], points[i + 1])) return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * Adds a new {@link Entity} to the level as long as the name isn't already
 	 * registered.
 	 * 
@@ -347,18 +434,34 @@ public class Level {
 	 */
 	public ArrayList<Entity> getNearbyEntities(float tileX, float tileY, float tileRadius, Entity ... exclude) {
 		ArrayList<Entity> excList = new ArrayList<Entity>(Arrays.asList(exclude));
-		ArrayList<Entity> found = new ArrayList<Entity>();
+		HashMap<Entity, Float> found = new HashMap<Entity, Float>();
 		float trSqrd = tileRadius * tileRadius;
+		float tmpDist;
 		
 		for(Entity e : getEntities()) {
 			if(excList.contains(e)) continue;
-			if(MathUtil.distanceSqrd(tileX, tileY, e.getAnchoredTileX(), e.getAnchoredTileY()) <= trSqrd) found.add(e);
+			tmpDist = MathUtil.distanceSqrd(tileX, tileY, e.getAnchoredTileX(), e.getAnchoredTileY());
+			if(trSqrd == 0 || tmpDist <= trSqrd) {
+				found.put(e, new Float(tmpDist));
+			}
 		}
 		
-		return found;
+		ArrayList<Entity> ret = new ArrayList<Entity>(found.keySet());
+
+		Collections.sort(ret, new Comparator<Entity>() {
+			public int compare(Entity o1, Entity o2) {
+				float d = found.get(o1) - found.get(o2);
+				return d > 0 ? 1 : d < 0 ? -1 : 0; // if positive, o2 wins, if negative, o1 wins, otherwise equal
+			}
+		});
+		
+		return ret;
 	}
 	
 	public Entity getNearestEntity(float tileX, float tileY, float tileRadius, Entity ... exclude) {
+		ArrayList<Entity> ents = getNearbyEntities(tileX, tileY, tileRadius, exclude);
+		return ents.size() > 0 ? ents.get(0) : null;
+		/*
 		ArrayList<Entity> excList = new ArrayList<Entity>(Arrays.asList(exclude));
 		float trSqrd = tileRadius * tileRadius;
 		
@@ -370,13 +473,14 @@ public class Level {
 			if(excList.contains(e) || nearest == e) continue;
 			distTmp = MathUtil.distanceSqrd(tileX, tileY, e.getAnchoredTileX(), e.getAnchoredTileY());
 			
-			if(distTmp <= trSqrd && distTmp <= distance) {
+			if(tileRadius == 0 || (distTmp <= trSqrd && distTmp <= distance)) {
 				nearest = e;
 				distance = distTmp;
 			}
 		}
 		
 		return nearest;
+		*/
 	}
 	
 	/**

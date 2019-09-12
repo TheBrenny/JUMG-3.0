@@ -5,7 +5,11 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+import com.thebrenny.jumg.entities.ai.states.State;
+import com.thebrenny.jumg.entities.ai.states.StateMachine;
+
 public abstract class EntityLiving extends EntityMoving implements IHealable {
+	protected StateMachine<? extends EntityLiving, ? extends State<? extends EntityLiving>> brain;
 	protected float health;
 	protected float maxHealth;
 	protected float hbCacheHealth;
@@ -15,6 +19,14 @@ public abstract class EntityLiving extends EntityMoving implements IHealable {
 		super(name, id, x, y, tileMapX, tileMapY, speed);
 		this.health = this.maxHealth = health;
 	}
+	public EntityLiving setBrain(StateMachine<? extends EntityLiving, ? extends State<? extends EntityLiving>> brain) {
+		this.brain = brain;
+		return this;
+	}
+	public StateMachine<? extends EntityLiving, ? extends State<? extends EntityLiving>> getBrain() {
+		return this.brain;
+	}
+	
 	public float getHealth() {
 		return this.health;
 	}
@@ -29,8 +41,10 @@ public abstract class EntityLiving extends EntityMoving implements IHealable {
 	}
 	public void kill() {
 		hurt(this.health);
+		this.onDeath();
 	}
-	public void onDeath() {}
+	public void onDeath() {
+	}
 	public boolean isAlive() {
 		return this.health > 0.0F;
 	}
@@ -55,5 +69,9 @@ public abstract class EntityLiving extends EntityMoving implements IHealable {
 			this.hbCache = bi;
 		}
 		return hbCache;
+	}
+	public void renderDebug(Graphics2D g2d, long camX, long camY, int camW, int camH) {
+		super.renderDebug(g2d, camX, camY, camW, camH);
+		if(this.getBrain() != null) this.getBrain().renderDebug(g2d, camX, camY, camW, camH);
 	}
 }

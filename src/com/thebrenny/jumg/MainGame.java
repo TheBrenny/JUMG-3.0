@@ -29,13 +29,11 @@ import com.thebrenny.jumg.util.Logger;
  */
 public abstract class MainGame {
 	private static MainGame INSTANCE;
-	/**
-	 * The default scale of the game window.
-	 */
+	/** The default scale of the game window. */
 	private static float DEFAULT_SCALE = 1.0F;
-	/**
-	 * The default width of the game window.
-	 */
+	/** The default zoom of the game's content. */
+	private static float DEFAULT_ZOOM = 1.0F;
+	/** The default width of the game window. */
 	private static int DEFAULT_WIDTH = 900;
 	/**
 	 * The default height of the game window. Equal to nine twelfths of the
@@ -43,6 +41,7 @@ public abstract class MainGame {
 	 */
 	private static int DEFAULT_HEIGHT = DEFAULT_WIDTH / 12 * 9;
 	public static float SCALE = DEFAULT_SCALE;
+	public static float ZOOM = DEFAULT_ZOOM; // TODO: Implement zoom!
 	public static int WIDTH = DEFAULT_WIDTH;
 	public static int HEIGHT = DEFAULT_HEIGHT;
 	public static Dimension SIZE = new Dimension((int) (WIDTH * SCALE), (int) (HEIGHT * SCALE));
@@ -181,6 +180,7 @@ public abstract class MainGame {
 	 * @see {@link Images#addImage(String, String...)}
 	 */
 	protected abstract void loadImages();
+	
 	/**
 	 * The method where all tiles should be loaded.
 	 * 
@@ -188,6 +188,7 @@ public abstract class MainGame {
 	 * @see {@link Tile#registerTile(Tile)}
 	 */
 	protected abstract void loadTiles();
+	
 	/**
 	 * The method where all items should be loaded.
 	 * 
@@ -195,11 +196,13 @@ public abstract class MainGame {
 	 * @see {@link Item#registerItem(Item)}
 	 */
 	protected abstract void loadItems();
+	
 	/**
 	 * The method where all AIs should be loaded. This one's still a WIP
 	 * though...
 	 */
 	protected abstract void loadAI();
+	
 	/**
 	 * The method where all keybindings should be set up.
 	 * 
@@ -207,6 +210,7 @@ public abstract class MainGame {
 	 * @see {@link KeyBindings#addKey(String, int, boolean, boolean)}
 	 */
 	protected abstract void setupKeyBinds();
+	
 	/**
 	 * Essentially acts as the final spark plug to the {@link Engine}. This must
 	 * return true for the game to actually begin running.

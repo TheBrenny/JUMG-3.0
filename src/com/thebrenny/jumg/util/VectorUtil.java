@@ -12,13 +12,20 @@ import com.thebrenny.jumg.level.Level;
 import com.thebrenny.jumg.util.Angle.AngleSpeed;
 
 public class VectorUtil {
+	/**
+	 * Casts the given {@code ray} and determines if it collides with the line
+	 * defined by {@code p1} and {@code p2}.
+	 * 
+	 * @return A clone of {@code ray}, with the distance clamped to the
+	 *         collision if there is one.
+	 */
 	public static Ray castRay(Ray ray, Point2D p1, Point2D p2) {
 		Point2D.Float rayStart = ray.getLocation();
 		Point2D.Float rayEnd = ray.getEndLocation();
 		Point2D.Float rayCollide = lineIntersection(p1, p2, rayStart, rayEnd);
 		float rayCollideDist = (float) rayCollide.distance(rayStart);
 		if(rayCollideDist < ray.getDistance() && doesIntersect(p1, p2, rayStart, rayEnd)) ray = new Ray(rayStart, ray.getAngle().getAngle(), rayCollideDist);
-		return ray;
+		return new Ray(ray);
 	}
 	
 	public static Point2D.Float lineIntersection(Point2D p1, Point2D p2, Point2D p3, Point2D p4) {
@@ -31,6 +38,16 @@ public class VectorUtil {
 	
 	public static Point2D.Float lerp(Point2D p, Point2D q, float f) {
 		return new Point2D.Float(MathUtil.lerp((float) p.getX(), (float) q.getX(), f), MathUtil.lerp((float) p.getY(), (float) q.getY(), f));
+	}
+
+	public static final Point2D.Float translatePoint(Point2D point, float x, float y) {
+		return new Point2D.Float((float) point.getX() + x, (float) point.getY() + y);
+	}
+	public static final Point toIntPoint(Point2D p) {
+		return new Point((int) p.getX(), (int) p.getY());
+	}
+	public static final Point2D.Float toFloatPoint(Point2D p) {
+		return new Point2D.Float((float) p.getX(), (float) p.getY());
 	}
 	
 	public static class Vector {
@@ -64,6 +81,9 @@ public class VectorUtil {
 	public static class Ray extends Vector {
 		public Point2D location;
 		
+		public Ray(Point2D origin, Point2D destination) {
+			this(origin, Angle.getAngle(origin, destination), MathUtil.distance(origin, destination));
+		}
 		public Ray(Point2D location, Vector v) {
 			this(location, v.angle.getAngle(), v.distance);
 		}

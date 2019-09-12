@@ -264,11 +264,8 @@ public class Angle {
 			return ySpeed;
 		}
 		
-		/**
-		 * {@inheritdoc}
-		 */
 		public String toString() {
-			return StringUtil.insert("AngleSpeed[s={0}, xs={1}, ys={2}, a={3}]", this.distance, this.xSpeed, this.ySpeed, this.angle);
+			return StringUtil.insert("AngleSpeed[d={0}, xs={1}, ys={2}, a={3}]", this.distance, this.xSpeed, this.ySpeed, this.angle);
 		}
 		
 		public boolean equals(Object obj) {

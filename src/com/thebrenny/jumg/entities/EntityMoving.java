@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
+import com.thebrenny.jumg.entities.ai.pathfinding.Node;
 import com.thebrenny.jumg.level.tiles.Tile;
+import com.thebrenny.jumg.util.Angle;
 import com.thebrenny.jumg.util.Angle.AngleSpeed;
 import com.thebrenny.jumg.util.VectorUtil.Ray;
 
@@ -40,6 +42,10 @@ public abstract class EntityMoving extends Entity {
 	}
 	public void addMove(AngleSpeed speed) {
 		this.nextMove.addAngleSpeed(speed);
+	}
+	public void addMovementTo(Node node) {
+		this.setAngle(Angle.getAngle(this.getAnchoredTileLocation(), node.getPoint()));
+		addMovementMove();
 	}
 	public void move() {
 		this.nextMove = collisionTest(this.nextMove);
