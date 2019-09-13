@@ -19,21 +19,20 @@ public class GuiListSelector extends Component {
 		};
 		items = new GuiListItem[capacity];
 		this.multiSelect = multiSelect;
-		
 	}
 	
-	public GuiListSelector addToList(String... items) {
+	public GuiListSelector addToList(String ... items) {
 		float itemWidth = (float) (this.getWidth() - 7);
 		float itemHeight = (float) ((this.getHeight() - 7) / this.items.length);
 		for(int i = 0; i < items.length; i++) {
 			this.items[i] = new GuiListItem(0, itemHeight * i, itemWidth, itemHeight, items[i]);
 		}
+		this.requestNewImage();
 		return this;
 	}
 	
 	public void changeMe(boolean hover, boolean click, Point2D.Float mousePoint) {
-		super.changeMe(hover, click, mousePoint);
-		itemClicked(mousePoint);
+		if(super.changeMe(hover, click, mousePoint)) itemClicked(mousePoint);
 	}
 	
 	public void itemClicked(Point2D.Float mousePoint) {
@@ -45,21 +44,26 @@ public class GuiListSelector extends Component {
 				break;
 			}
 		}
+		this.requestNewImage();
 	}
 	public void selectItem(int index) {
 		if(this.multiSelect) items[index].selected(!items[index].isSelected());
 		else {
 			for(int i = 0; i < items.length; i++) {
 				if(items[i] == null) continue;
-				items[i].selected(index == i);
+				if(index == i) {
+					items[i].selected(index == i);
+					break;
+				}
 			}
 		}
+		this.requestNewImage();
 	}
 	
-	public BufferedImage getImage() {
+	public BufferedImage getNewImage() {
 		BufferedImage bi = new BufferedImage((int) getWidth(), (int) getHeight(), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
-			
+		
 		g2d.setColor(new Color(70, 70, 70));
 		g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 		g2d.setColor(Color.BLACK);
@@ -74,10 +78,6 @@ public class GuiListSelector extends Component {
 		return bi;
 	}
 	
-	@Override
-	public void render(Graphics2D g2d, long xOffset, long yOffset) {
-		g2d.drawImage(getImage(), (int) getX(), (int) getY(), null);
-	}
 	public class GuiListItem extends GuiLabel {
 		private static final long serialVersionUID = 1L;
 		protected boolean selected = false;

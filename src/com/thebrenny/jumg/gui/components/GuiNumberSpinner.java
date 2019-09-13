@@ -1,13 +1,15 @@
 package com.thebrenny.jumg.gui.components;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.thebrenny.jumg.util.MathUtil;
 
 /**
- * Creates a number spinner built from two buttons and a text box, which is limited to number input only.
+ * Creates a number spinner built from two buttons and a text box, which is
+ * limited to number input only. It doesn't actually render anything, instead it
+ * adds those three components to the components ArrayList of the screen (which
+ * is passed).
  * 
  * @author TheBrenny
  */
@@ -40,7 +42,7 @@ public class GuiNumberSpinner extends Component {
 		
 		if(height > width) {
 			upButton.setRect(x, y, width, width);
-			spinnerText.setRect(x, y + width,width,height - 2 * width);
+			spinnerText.setRect(x, y + width, width, height - 2 * width);
 			downButton.setRect(x, y + height - width, width, width);
 		}
 		components.add(upButton);
@@ -67,6 +69,7 @@ public class GuiNumberSpinner extends Component {
 		return this.number;
 	}
 	
-	public BufferedImage getImage() {return null;}
-	public void render(Graphics2D g2d, long xOffset, long yOffset) {}
+	public BufferedImage getNewImage() {
+		return null;
+	}
 }

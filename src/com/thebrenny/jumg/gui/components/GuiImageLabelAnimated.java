@@ -24,13 +24,18 @@ public class GuiImageLabelAnimated extends GuiImageLabel {
 		this.multiplierX = multX;
 		this.multiplierY = multY;
 	}
-	
-	public BufferedImage getImage() {
+
+	public void tick() {
+		super.tick();
+		
 		long elapsed = TimeUtil.getElapsed(this.lastTime);
 		this.lastTime += elapsed;
 		int posAdd = (int) Math.floor(elapsed / this.delay);
 		elapsed %= this.delay;
 		this.spriteIndex = (short) ((this.spriteIndex + posAdd) % this.spriteCount);
+	}
+	
+	public BufferedImage getNewImage() {
 		return Images.getSubImage(this.image, this.multiplierX, this.multiplierY, this.spriteIndex, 0, this.multiplierX, this.multiplierY);
 	}
 }

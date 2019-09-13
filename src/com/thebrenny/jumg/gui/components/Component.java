@@ -27,7 +27,7 @@ public abstract class Component extends Rectangle2D.Float {
 		this.run = run;
 	}
 	
-	public void changeMe(boolean hover, boolean clicked, Point2D mousePoint) {
+	public boolean changeMe(boolean hover, boolean clicked, Point2D mousePoint) {
 		if(enabled) {
 			this.hovering = hover;
 			this.clicked = hover && clicked;
@@ -35,7 +35,10 @@ public abstract class Component extends Rectangle2D.Float {
 			if(run != null) {
 				doClick();
 			}
+			this.requestNewImage();
+			return true;
 		}
+		return false;
 	}
 	public void doClick() {
 		if(this.clicked) pressed = true;
@@ -70,7 +73,21 @@ public abstract class Component extends Rectangle2D.Float {
 		super.setRect(this.x, this.y, width, height);
 		return this;
 	}
+	public Component move(float x, float y) {
+		super.setRect(x, y, this.width, this.height);
+		return this;
+	}
 	
 	public void tick() {}
-	public abstract void render(Graphics2D g2d, long xOffset, long yOffset);
+	public void render(Graphics2D g2d, long xOffset, long yOffset) {
+		g2d.drawImage(getImage(), (int) (getX() - xOffset), (int) (getY() - yOffset), null);
+	}
+	public BufferedImage getImage() {
+		if(this.image == null) this.image = getNewImage();
+		return this.image;
+	}
+	public abstract BufferedImage getNewImage();
+	public void requestNewImage() {
+		this.image = null;
+	}
 }

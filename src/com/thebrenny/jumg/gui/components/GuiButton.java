@@ -36,22 +36,17 @@ public class GuiButton extends Component {
 		return this;
 	}
 	
-	public void requestNewImage() {
-		this.biCache = null;
-	}
-	
-	public BufferedImage getImage() {
-		if(biCache == null) {
-			BufferedImage bi = new BufferedImage((int) getWidth(), (int) getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = bi.createGraphics();
-			
-			int xOff = this.pressed || !this.enabled ? GUI_MAP_SECTION_COUNT * 2 : this.hovering ? GUI_MAP_SECTION_COUNT * 1 : GUI_MAP_SECTION_COUNT * 0;
-			int widthDiv = (int) getWidth() - GUI_MAP_SECTION_SIZE * 2;
-			int heightDiv = (int) getHeight() - GUI_MAP_SECTION_SIZE * 2;
-			
-			for(int x = 0; x < GUI_MAP_SECTION_COUNT; x++) {
-				for(int y = 0; y < GUI_MAP_SECTION_COUNT; y++) {
-					//@formatter:off
+	public BufferedImage getNewImage() {
+		BufferedImage bi = new BufferedImage((int) getWidth(), (int) getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		
+		int xOff = this.pressed || !this.enabled ? GUI_MAP_SECTION_COUNT * 2 : this.hovering ? GUI_MAP_SECTION_COUNT * 1 : GUI_MAP_SECTION_COUNT * 0;
+		int widthDiv = (int) getWidth() - GUI_MAP_SECTION_SIZE * 2;
+		int heightDiv = (int) getHeight() - GUI_MAP_SECTION_SIZE * 2;
+		
+		for(int x = 0; x < GUI_MAP_SECTION_COUNT; x++) {
+			for(int y = 0; y < GUI_MAP_SECTION_COUNT; y++) {
+				//@formatter:off
 					g2d.drawImage(
 							GUI_MAP[x + xOff][y],
 							(x == 0 ? 0 : GUI_MAP_SECTION_SIZE) + (x == 2 ? widthDiv : 0),
@@ -61,18 +56,12 @@ public class GuiButton extends Component {
 							null
 					);
 					//@formatter:on
-				}
 			}
-			
-			label.render(g2d, 0, 0);
-			g2d.dispose();
-			biCache = bi;
 		}
-		return biCache;
-	}
-	
-	public void render(Graphics2D g2d, long camX, long camY) {
-		g2d.drawImage(getImage(), (int) getX(), (int) getY(), null);
+		
+		label.render(g2d, 0, 0);
+		g2d.dispose();
+		return bi;
 	}
 	
 	static {

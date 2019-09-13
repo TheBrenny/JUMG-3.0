@@ -19,7 +19,6 @@ public class GuiTextBox extends Component implements InputStealer {
 	public GuiLabel text;
 	public int blinker = 0;
 	public int cursor;
-	public BufferedImage biCache;
 	
 	public GuiTextBox(float x, float y, float width, float height, String defText) {
 		super(x, y, width, height);
@@ -61,9 +60,11 @@ public class GuiTextBox extends Component implements InputStealer {
 					clicked = false;
 				}
 			}
+			this.requestNewImage();
 		}
 	}
 	public void doClick() {
+		if(!this.enabled) return;
 		if(this.clicked) pressed = true;
 		
 		if(pressed && hovering && !clicked) {
@@ -72,6 +73,7 @@ public class GuiTextBox extends Component implements InputStealer {
 		} else if(pressed && !hovering) {
 			pressed = false;
 		}
+		this.requestNewImage();
 	}
 	
 	public void stealInput(KeyEvent keyStolen) {
@@ -102,78 +104,68 @@ public class GuiTextBox extends Component implements InputStealer {
 	
 	public void shiftCursor(int amount) {
 		placeCursor(cursor + amount);
+		this.requestNewImage();
 	}
 	public void placeCursor(int index) {
 		index = MathUtil.clamp(0, index, text.getString(0).length());
 		cursor = index;
+		this.requestNewImage();
 	}
 	public void setString(String s) {
 		removeAll();
 		addString(s);
+		this.requestNewImage();
 	}
 	public void addString(String s) {
 		text.insertString(0, cursor, s);
 		cursor += s.length();
+		this.requestNewImage();
 	}
 	public void removePrevious() {
 		if(cursor > 0) {
 			text.setString(0, text.getString(0).substring(0, cursor - 1) + text.getString(0).substring(cursor));
 			cursor--;
+			this.requestNewImage();
 		}
 	}
 	public void removeNext() {
 		if(cursor < text.getString(0).length()) {
 			text.setString(0, text.getString(0).substring(0, cursor) + text.getString(0).substring(cursor + 1));
+			this.requestNewImage();
 		}
 	}
 	public void removeAll() {
 		text.setString(0, "");
+		this.requestNewImage();
 	}
 	
 	public String getString() {
 		return this.text.getString(0);
 	}
 	
-	public Component resize(float width, float height) {
-		requestNewImage();
-		return super.resize(width, height);
-	}
-	
 	public void tick() {
-		if(this.selected && blinker > 0) {
-			blinker--;
-		} else {
-			blinker = 40;
-		}
+		if(this.selected && blinker > 0) blinker--;
+		else blinker = 40;
+		
+		if(blinker == 40 || blinker == 20) this.requestNewImage();
 		
 		if(!this.selected) blinker = 0;
 	}
-	public BufferedImage getImage() {
-		if(biCache == null) {
-			BufferedImage bi = new BufferedImage((int) getWidth(), (int) getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2d = bi.createGraphics();
-			
-			g2d.setColor(new Color(70, 70, 70));
-			g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-			g2d.setColor(Color.BLACK);
-			g2d.fillRect(2, 2, bi.getWidth() - 5, bi.getHeight() - 5);
-			
-			g2d.dispose();
-			biCache = bi;
-		}
-		return biCache;
-	}
-	public void requestNewImage() {
-		this.biCache = null;
-	}
-	
-	public void render(Graphics2D g2d, long xOffset, long yOffset) {
+	public BufferedImage getNewImage() {
+		BufferedImage bi = new BufferedImage((int) getWidth(), (int) getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = bi.createGraphics();
+		
+		g2d.setColor(new Color(70, 70, 70));
+		g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(2, 2, bi.getWidth() - 5, bi.getHeight() - 5);
+		
 		if(blinker > 20) {
 			g2d.setColor(Color.ORANGE);
-			g2d.fillRect((int) (getX() + xOffset + text.getSubstringWidth(0, 0, cursor)) + 3, (int) (getY() + yOffset + text.getAllignedY(0)) + 7, 1, (int) text.getSingleHeight());
+			g2d.fillRect((int) (text.getSubstringWidth(0, 0, cursor)) + 3, (int) (text.getAllignedY(0)) + 7, 1, (int) text.getSingleHeight());
 		}
-		
-		g2d.drawImage(getImage(), (int) (getX() + xOffset), (int) (getY() + yOffset), null);
-		text.render(g2d, (int) getX() + xOffset, (int) getY() + yOffset);
+
+		g2d.dispose();
+		return bi;
 	}
 }

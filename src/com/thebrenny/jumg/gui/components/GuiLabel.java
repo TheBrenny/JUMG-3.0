@@ -23,6 +23,9 @@ public class GuiLabel extends Component {
 	public static Font TITLE_FONT = new Font("Terminal", Font.BOLD, 40);
 	public static Font BODY_FONT = new Font("Terminal", Font.PLAIN, 12);
 	
+	protected float realX;
+	protected float realY;
+	
 	protected String[] string;
 	protected String[] allignment;
 	protected Font font;
@@ -34,6 +37,8 @@ public class GuiLabel extends Component {
 	}
 	public GuiLabel(float x, float y, String string, Font font) {
 		super(x, y);
+		this.realX = x;
+		this.realY = y;
 		if(string == null) string = "";
 		this.string = string.split("\n");
 		if(font == null) font = BODY_FONT;
@@ -44,7 +49,7 @@ public class GuiLabel extends Component {
 		Graphics2D g2d = bi.createGraphics();
 		this.fontMets = g2d.getFontMetrics(font);
 		g2d.dispose();
-		this.resize(getMaxWidth(), getMaxHeight());
+		this.fixBounds();
 	}
 	
 	public GuiLabel setFont(Font font) {
@@ -53,7 +58,7 @@ public class GuiLabel extends Component {
 		Graphics2D g2d = bi.createGraphics();
 		this.fontMets = g2d.getFontMetrics(font);
 		g2d.dispose();
-		this.resize(getMaxWidth(), getMaxHeight());
+		this.fixBounds();
 		return this;
 	}
 	public GuiLabel adjustFont(int style) {
@@ -66,10 +71,12 @@ public class GuiLabel extends Component {
 	}
 	public GuiLabel setColor(Color color) {
 		this.color = color;
+		this.requestNewImage();
 		return this;
 	}
 	public GuiLabel allign(String allign) {
 		if(allign.contains(":")) this.allignment = allign.split(":");
+		this.fixBounds();
 		return this;
 	}
 	public GuiLabel allign(String allignHorizontal, String allignVertical) {
@@ -85,11 +92,13 @@ public class GuiLabel extends Component {
 			this.string = newStrings;
 		}
 		this.string[line] = s;
+		this.fixBounds();
 	}
 	public void insertString(int line, int pos, String s) {
 		line = MathUtil.clamp(0, line, string.length);
 		if(line == string.length) setString(line, s);
 		else string[line] = string[line].substring(0, pos) + s + string[line].substring(pos);
+		this.fixBounds();
 	}
 	
 	public int getLines() {
@@ -113,11 +122,11 @@ public class GuiLabel extends Component {
 	}
 	public float getMaxAllignedX() {
 		float xOff = allignment[0].equalsIgnoreCase(ALLIGN_HORIZONTAL_RIGHT) ? getMaxWidth() : allignment[0].equalsIgnoreCase(ALLIGN_HORIZONTAL_CENTRE) ? getMaxWidth() / 2 : 0;
-		return (float) getX() - xOff;
+		return xOff;//(float) getX() - xOff;
 	}
 	public float getMaxAllignedY() {
 		float yOff = allignment[1].equalsIgnoreCase(ALLIGN_VERTICAL_BOTTOM) ? getMaxHeight() : allignment[1].equalsIgnoreCase(ALLIGN_VERTICAL_CENTRE) ? getMaxHeight() / 2 : 0;
-		return (float) getY() - yOff;
+		return yOff;//(float) getY() - yOff;
 	}
 	public float getWidth(int line) {
 		return Math.max(1, fontMets.stringWidth(string[line]));
@@ -128,7 +137,7 @@ public class GuiLabel extends Component {
 	public float getMaxWidth() {
 		float biggestString = 1;
 		for(String s : string)
-			if(fontMets.stringWidth(s) > biggestString) biggestString = fontMets.stringWidth(s);
+			biggestString = Math.max(fontMets.stringWidth(s), biggestString);
 		return biggestString;
 	}
 	public float getMaxHeight() {
@@ -138,7 +147,7 @@ public class GuiLabel extends Component {
 		return fontMets.stringWidth(string[line].substring(startPos, endPos));
 	}
 	
-	public BufferedImage getImage() {
+	public BufferedImage getNewImage() {
 		BufferedImage bi = new BufferedImage((int) getMaxWidth() + 3, (int) getMaxHeight() + 3, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setFont(this.font);
@@ -148,7 +157,10 @@ public class GuiLabel extends Component {
 		}
 		return bi;
 	}
-	public void render(Graphics2D g2d, long xOffset, long yOffset) {
-		g2d.drawImage(getImage(), (int) (getMaxAllignedX() + xOffset), (int) (getMaxAllignedY() + yOffset), null);
+	
+	public void fixBounds() {
+		this.resize(getMaxWidth(), getMaxHeight());
+		this.move(realX - getMaxAllignedX(), realY - getMaxAllignedY());
+		this.requestNewImage();
 	}
 }
