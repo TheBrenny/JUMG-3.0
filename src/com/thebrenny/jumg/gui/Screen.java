@@ -135,6 +135,10 @@ public abstract class Screen {
 		Screen.CAMERA_SPEED = MathUtil.wrap(0.001F, camSpeed, 1.0F);
 		if(camSpeed != Screen.CAMERA_SPEED) Logger.log("Cam speed was either too small or too high, so it's been wrapped within the boundaries of 0.001 and 1.0: " + Screen.CAMERA_SPEED);
 	}
+	public static void centerCameraOn(long camX, long camY) {
+		setCameraX(camX - getWidth() / 2);
+		setCameraY(camY - getHeight() / 2);
+	}
 	
 	public static boolean canCameraSeeTile(float x, float y) {
 		return canCameraSeeTile(x, y, getCameraX(), getCameraY(), getWidth(), getHeight());

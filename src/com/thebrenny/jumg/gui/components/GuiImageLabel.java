@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class GuiImageLabel extends GuiLabel {
+	private static final long serialVersionUID = 1L;
 	protected BufferedImage image;
 	
 	public GuiImageLabel(float x, float y, BufferedImage image) {

@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import com.thebrenny.jumg.util.Images;
 
 public class GuiButton extends Component {
+	private static final long serialVersionUID = 1L;
 	public static final BufferedImage BUTTON_MAP_IMAGE = Images.getImage("gui_buttons");
 	public static final int GUI_MAP_SECTION_COUNT = 3;
 	public static final int GUI_MAP_SECTION_SIZE = 11;

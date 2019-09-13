@@ -3,13 +3,17 @@ package com.thebrenny.jumg.gui.components;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public abstract class Component extends Rectangle2D.Float {
+	private static final long serialVersionUID = 1L;
 	protected Runnable run;
 	protected boolean enabled = true;
 	protected boolean hovering;
 	protected boolean clicked;
 	protected boolean pressed;
+	
+	private BufferedImage image;
 	// TODO: Make it so this has a "shouldUpdate" attribute, so we don't constantly recreate the image for no change.
 	
 	public Component(float x, float y) {

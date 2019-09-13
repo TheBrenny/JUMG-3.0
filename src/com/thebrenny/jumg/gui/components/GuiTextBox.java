@@ -12,6 +12,7 @@ import com.thebrenny.jumg.util.MathUtil;
 import com.thebrenny.jumg.util.StringUtil;
 
 public class GuiTextBox extends Component implements InputStealer {
+	private static final long serialVersionUID = 1L;
 	public String ASCII = StringUtil.ASCII;
 	public boolean selected = false;
 	public boolean loseInput = false;

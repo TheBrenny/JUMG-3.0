@@ -43,7 +43,7 @@ public abstract class ScreenMenu extends Screen {
 	}
 	public abstract void tick();
 	public void renderBackground(Graphics2D g2d) {
-		g2d.drawImage(this.backgroundImage, 0, 0, this.getWidth(), this.getHeight(), null);
+		g2d.drawImage(this.backgroundImage, 0, 0, Screen.getWidth(), Screen.getHeight(), null);
 	}
 	public abstract void render(Graphics2D g2d);
 	public void renderComponents(Graphics2D g2d) {

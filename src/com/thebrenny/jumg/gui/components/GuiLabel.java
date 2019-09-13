@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import com.thebrenny.jumg.util.MathUtil;
 
 public class GuiLabel extends Component {
+	private static final long serialVersionUID = 1L;
 	public static final String ALLIGN_HORIZONTAL_LEFT = "left";
 	public static final String ALLIGN_HORIZONTAL_CENTRE = "centre";
 	public static final String ALLIGN_HORIZONTAL_RIGHT = "right";

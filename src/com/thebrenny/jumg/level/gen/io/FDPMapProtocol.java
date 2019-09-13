@@ -51,7 +51,7 @@ public class FDPMapProtocol extends FileDataProtocol {
 		//dcx-y = tiles
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				dc[index++] = new DataChunk(MathUtil.toBitArray(tileIDs[y][x], 2));
+				dc[index++] = new DataChunk(MathUtil.toBitArray(tileIDs[x][y], 2));
 			}
 		}
 		
@@ -79,7 +79,7 @@ public class FDPMapProtocol extends FileDataProtocol {
 		counter = 16;
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				this.tileIDs[y][x] = (byte) MathUtil.fromBitArray(data.getData(counter, 2));
+				this.tileIDs[x][y] = (byte) MathUtil.fromBitArray(data.getData(counter, 2));
 				counter += 2;
 			}
 		}

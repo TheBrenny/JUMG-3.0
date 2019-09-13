@@ -6,6 +6,7 @@ import com.thebrenny.jumg.util.Images;
 import com.thebrenny.jumg.util.TimeUtil;
 
 public class GuiImageLabelAnimated extends GuiImageLabel {
+	private static final long serialVersionUID = 1L;
 	protected long lastTime;
 	protected long delay;
 	protected short spriteCount;

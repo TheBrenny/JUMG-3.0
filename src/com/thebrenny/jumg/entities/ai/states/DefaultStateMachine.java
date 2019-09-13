@@ -28,6 +28,12 @@ public class DefaultStateMachine<E extends Entity, S extends State<E>> implement
 		this.setGlobalState(globalState);
 	}
 	
+	public S getState() {
+		return getState(true);
+	}
+	public S getState(boolean youMeanCurrentYeah) {
+		return youMeanCurrentYeah ? getCurrentState() : getGlobalState();
+	}
 	public S getCurrentState() {
 		return currentState;
 	}
@@ -78,7 +84,6 @@ public class DefaultStateMachine<E extends Entity, S extends State<E>> implement
 		return currentState == state;
 	}
 	public void renderDebug(Graphics2D g2d, long camX, long camY, int camW, int camH) {
-		if(globalState != null) globalState.renderDebug(owner, g2d, camX, camY, camW, camH);
 		if(currentState != null) currentState.renderDebug(owner, g2d, camX, camY, camW, camH);
 	}
 }

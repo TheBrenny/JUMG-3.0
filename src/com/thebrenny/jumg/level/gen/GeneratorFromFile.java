@@ -52,7 +52,7 @@ public class GeneratorFromFile extends Generator {
 			
 			for(int ty = y * td.length; ty < y * td.length + td.length; ty++) {
 				for(int tx = x * td.length; tx < x * td.length + td.length; tx++) {
-					td[ty - y * td.length][tx - x * td.length] = Tile.getTile(mapData.getTiles()[ty][tx]);
+					td[tx - x * td.length][ty - y * td.length] = Tile.getTile(mapData.getTiles()[tx][ty]);
 				}
 			}
 			

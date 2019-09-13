@@ -106,10 +106,11 @@ public class Level {
 	}
 	/**
 	 * Calls {@link Level#getTileRelative(int, int)} after converting the float
-	 * position to tile coordinates (through {@link Level#toTileCoords(int)}.
+	 * position to tile coordinates (through {@link Level#toTileCoords(int)}).
 	 */
-	public Tile getTileRelative(float x, float y) {
-		Point p = toTileCoords(x, y);
+	public Tile getTileRelative(float x, float y, boolean isTileCoords) {
+		Point p = roundTileCoords(x, y);
+		if(!isTileCoords) p = toTileCoords(x, y);
 		return getTileRelative(p.x, p.y);
 	}
 	
@@ -397,7 +398,7 @@ public class Level {
 		Logger.log("Adding entity [{0}] at tile location [({1}, {2})]", e.getName(), e.getAnchoredTileX(), e.getAnchoredTileY());
 		Entity tmp;
 		if((tmp = getEntity(e.getName())) != null) {
-			Logger.log("OH NO! An entity is already using the name [{0}]: {1}", (Object) tmp.getName(), tmp.getClass().getName());
+			Logger.log("OH NO! An entity is already using the name [{0}]: {1}", (Object) tmp.getName(), tmp.getClass().getSimpleName());
 			return false;
 		}
 		Level.ALL_ENTITIES_ON_MAP++;
@@ -447,7 +448,7 @@ public class Level {
 		}
 		
 		ArrayList<Entity> ret = new ArrayList<Entity>(found.keySet());
-
+		
 		Collections.sort(ret, new Comparator<Entity>() {
 			public int compare(Entity o1, Entity o2) {
 				float d = found.get(o1) - found.get(o2);
@@ -462,25 +463,23 @@ public class Level {
 		ArrayList<Entity> ents = getNearbyEntities(tileX, tileY, tileRadius, exclude);
 		return ents.size() > 0 ? ents.get(0) : null;
 		/*
-		ArrayList<Entity> excList = new ArrayList<Entity>(Arrays.asList(exclude));
-		float trSqrd = tileRadius * tileRadius;
-		
-		Entity nearest = null;
-		float distance = Float.MAX_VALUE;
-		float distTmp;
-		
-		for(Entity e : getEntities()) {
-			if(excList.contains(e) || nearest == e) continue;
-			distTmp = MathUtil.distanceSqrd(tileX, tileY, e.getAnchoredTileX(), e.getAnchoredTileY());
-			
-			if(tileRadius == 0 || (distTmp <= trSqrd && distTmp <= distance)) {
-				nearest = e;
-				distance = distTmp;
-			}
-		}
-		
-		return nearest;
-		*/
+		 * ArrayList<Entity> excList = new
+		 * ArrayList<Entity>(Arrays.asList(exclude));
+		 * float trSqrd = tileRadius * tileRadius;
+		 * Entity nearest = null;
+		 * float distance = Float.MAX_VALUE;
+		 * float distTmp;
+		 * for(Entity e : getEntities()) {
+		 * if(excList.contains(e) || nearest == e) continue;
+		 * distTmp = MathUtil.distanceSqrd(tileX, tileY, e.getAnchoredTileX(),
+		 * e.getAnchoredTileY());
+		 * if(tileRadius == 0 || (distTmp <= trSqrd && distTmp <= distance)) {
+		 * nearest = e;
+		 * distance = distTmp;
+		 * }
+		 * }
+		 * return nearest;
+		 */
 	}
 	
 	/**
@@ -522,7 +521,7 @@ public class Level {
 		Logger.log("Adding item entity [{0}] at tile location [({1}, {2})]", ie.getName(), ie.getAnchoredTileX(), ie.getAnchoredTileY());
 		ItemEntity tmp;
 		if((tmp = getItemEntity(ie.getName())) != null) {
-			Logger.log("OH NO! An item entity is already using the name [{0}]: {1}", (Object) tmp.getName(), tmp.getClass().getName());
+			Logger.log("OH NO! An item entity is already using the name [{0}]: {1}", (Object) tmp.getName(), tmp.getClass().getSimpleName());
 			return false;
 		}
 		Level.ALL_ENTITIES_ON_MAP++;
@@ -599,7 +598,7 @@ public class Level {
 		Logger.log("Adding tile entity [{0}] at tile location [({1}, {2})]", te.getName(), te.getTileX(), te.getTileY());
 		TileEntity tmp = getTileEntity(te.getTileX(), te.getTileY());
 		if(tmp != null) {
-			Logger.log("OH NO! A tile entity is already there [{0}]: {1}", tmp.getName(), tmp.getClass().getName());
+			Logger.log("OH NO! A tile entity is already there [{0}]: {1}", tmp.getName(), tmp.getClass().getSimpleName());
 			return false;
 		}
 		Level.ALL_TILES_ON_MAP++;
@@ -651,7 +650,7 @@ public class Level {
 		Logger.log("Adding structure [{0}] at tile location [({1}, {2})]", s.getUID(), s.getAnchoredX(), s.getAnchoredY());
 		Structure tmp;
 		if((tmp = getStructure(s.getUID())) != null) {
-			Logger.log("OH NO! A structure is already using the UID [{0}]: {1}", (Object) tmp.getUID(), tmp.getClass().getName());
+			Logger.log("OH NO! A structure is already using the UID [{0}]: {1}", (Object) tmp.getUID(), tmp.getClass().getSimpleName());
 			return false;
 		}
 		//s.setLevel(this); // there's currently no "setLevel(Level) function.

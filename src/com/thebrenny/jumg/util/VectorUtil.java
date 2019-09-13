@@ -70,7 +70,7 @@ public class VectorUtil {
 		}
 		
 		public String toString() {
-			return getClass().getName() + StringUtil.insert("[angle={0},dist={1}]", angle, distance);
+			return getClass().getSimpleName() + StringUtil.insert("[angle={0},dist={1}]", angle, distance);
 		}
 		
 		public boolean equals(Object obj) {
@@ -184,6 +184,7 @@ public class VectorUtil {
 		}
 		
 		private class EndPoint extends Point2D.Float {
+			private static final long serialVersionUID = 1L;
 			public boolean begin = false;
 			public Segment segment = null;
 			public float angle = 0.0F;

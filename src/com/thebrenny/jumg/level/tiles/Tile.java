@@ -52,7 +52,7 @@ public class Tile implements ITile {
 	}
 	
 	public String toString() {
-		return StringUtil.insert("{0}[name: {1}, id: {2}, solid: {3}]", getClass().getName(), this.getName(), this.getID(), this.isSolid());
+		return StringUtil.insert("{0}[name: {1}, id: {2}, solid: {3}]", getClass().getSimpleName(), this.getName(), this.getID(), this.isSolid());
 	}
 	
 	public static boolean registerTile(Tile t) {

@@ -2,16 +2,17 @@ package com.thebrenny.jumg.entities.ai.pathfinding;
 
 import java.awt.geom.Point2D;
 
+import com.thebrenny.jumg.util.StringUtil;
+
 public class Node {
 	private Node parent;
-	private Node child;
-	private Point2D.Float point;
+	private Point2D point;
 	
 	private float f; // Total Cost
 	private float g; // Distance from start
 	private float h; // Estimated distance to end
 	
-	public Node(Node parent, Point2D.Float point) {
+	public Node(Node parent, Point2D point) {
 		this.parent = parent;
 		this.point = point;
 		
@@ -25,18 +26,12 @@ public class Node {
 		this.h = h;
 		this.f = g + h;
 	}
-	public void setChild(Node child) {
-		this.child = child;
-	}
 	
 	public Node getParent() {
 		return this.parent;
 	}
-	public Node getChild() {
-		return this.child;
-	}
 	public Point2D.Float getPoint() {
-		return this.point;
+		return new Point2D.Float((float) this.point.getX(), (float) this.point.getY());
 	}
 	public float getG() {
 		return this.g;
@@ -48,8 +43,11 @@ public class Node {
 		return this.f;
 	}
 	
-	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof Node && ((Node) obj).getPoint() == this.point;
+	}
+
+	public String toString() {
+		return StringUtil.insert("{0}[pos:({1},{2}), f={3}={4}+{5}]", getClass().getSimpleName(), getPoint().getX(), getPoint().getY(), getCost(), getG(), getH());
 	}
 }

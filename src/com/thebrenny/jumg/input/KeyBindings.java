@@ -143,7 +143,7 @@ public class KeyBindings {
 			if(flag && !PRESSED_KEYS.contains(this)) PRESSED_KEYS.add(this);
 		}
 		public String toString() {
-			return getClass().getName() + "[Name{" + name + "},Code{" + code + "},IsPressed{" + isPressed + "}]";
+			return getClass().getSimpleName() + "[Name{" + name + "},Code{" + code + "},IsPressed{" + isPressed + "}]";
 		}
 	}
 	public static class Key extends Thing {

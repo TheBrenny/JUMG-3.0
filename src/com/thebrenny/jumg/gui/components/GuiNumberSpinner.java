@@ -12,6 +12,7 @@ import com.thebrenny.jumg.util.MathUtil;
  * @author TheBrenny
  */
 public class GuiNumberSpinner extends Component {
+	private static final long serialVersionUID = 1L;
 	protected GuiButton upButton;
 	protected GuiTextBox spinnerText;
 	protected GuiButton downButton;

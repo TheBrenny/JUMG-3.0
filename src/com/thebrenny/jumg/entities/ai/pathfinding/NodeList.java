@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class NodeList extends ArrayList<Node> {
 	private static final long serialVersionUID = 3063720407053093925L;
-	public static final float DEFAULT_TEST_DISTANCE = 0.1F;
+	public static final float DEFAULT_TEST_DISTANCE = 0.5F;
 	
 	public static final int PROXIMITY_TEST_FAILED = 0;
 	public static final int PROXIMITY_TEST_REACHED = 1;
@@ -31,6 +31,9 @@ public class NodeList extends ArrayList<Node> {
 	}
 	public void push(Node n) {
 		this.add(0, n);
+	}
+
+	public void sort() {
 		this.sort(NODE_COMPARATOR);
 	}
 	

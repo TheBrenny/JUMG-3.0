@@ -256,7 +256,7 @@ public abstract class MainGame {
 	 *        - True to enter debug. False to exit debug.
 	 */
 	public void setDebug(boolean debug) {
-		if(debug != this.debugging) Logger.log("Visual debugging is [{0}].", (Object) (this.debugging ? "on" : "off"));
+		if(debug != this.debugging) Logger.log("Visual debugging is [{0}].", (Object) (debug ? "on" : "off"));
 		this.debugging = debug;
 	}
 	/**

@@ -42,7 +42,7 @@ public class Chunk {
 		
 		for(int x = 0; x < Chunk.CHUNK_SIZE; x++) {
 			for(int y = 0; y < Chunk.CHUNK_SIZE; y++) {
-				g2d.drawImage(chunk[y][x].getImage(), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
+				g2d.drawImage(chunk[x][y].getImage(), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
 			}
 		}
 		

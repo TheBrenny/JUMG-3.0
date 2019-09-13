@@ -6,6 +6,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 public class GuiListSelector extends Component {
+	private static final long serialVersionUID = 1L;
 	public GuiListItem[] items;
 	protected boolean multiSelect;
 	
@@ -78,6 +79,7 @@ public class GuiListSelector extends Component {
 		g2d.drawImage(getImage(), (int) getX(), (int) getY(), null);
 	}
 	public class GuiListItem extends GuiLabel {
+		private static final long serialVersionUID = 1L;
 		protected boolean selected = false;
 		
 		public GuiListItem(float x, float y, float width, float height, String string) {
