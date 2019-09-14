@@ -101,10 +101,6 @@ public abstract class MainGame {
 		loadItems();
 		Logger.endLatestSection("Items initialised.");
 		
-		Logger.startSection("aiLoad", "Initialising AI.");
-		loadAI();
-		Logger.endLatestSection("AI initialised.");
-		
 		Logger.startSection("frameInit", "Creating frame.");
 		setDimensions(ArgumentOrganizer.getOrganizedArguments().floatVal("scale"));
 		makeFrame();
@@ -196,12 +192,6 @@ public abstract class MainGame {
 	 * @see {@link Item#registerItem(Item)}
 	 */
 	protected abstract void loadItems();
-	
-	/**
-	 * The method where all AIs should be loaded. This one's still a WIP
-	 * though...
-	 */
-	protected abstract void loadAI();
 	
 	/**
 	 * The method where all keybindings should be set up.

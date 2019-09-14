@@ -710,7 +710,8 @@ public class Level {
 	 * not. This is already called by {@link Level#tick()}.
 	 */
 	public void tickEntities() {
-		for(Entity e : getEntities()) {
+		Entity[] ents = getEntities().toArray(new Entity[getEntities().size()]);
+		for(Entity e : ents) {
 			e.tick();
 			checkForMapExpansion((int) e.getTileX(), (int) e.getTileY());
 		}
