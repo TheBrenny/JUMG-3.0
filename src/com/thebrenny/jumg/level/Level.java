@@ -49,9 +49,13 @@ public class Level {
 	protected Generator generator;
 	protected ChunkMap chunkMap;
 	protected ArrayList<Entity> entities;
+	protected Entity[] entitiesCache;
 	protected ArrayList<ItemEntity> itemEntities;
+	protected ItemEntity[] itemEntitiesCache;
 	protected ArrayList<TileEntity> tileEntities;
+	protected TileEntity[] tileEntitiesCache;
 	protected ArrayList<Structure> structures;
+	protected Structure[] structuresCache;
 	protected DayNightCycle dayNightCycle;
 	protected boolean doesExpand = false;
 	
@@ -401,6 +405,7 @@ public class Level {
 			Logger.log("OH NO! An entity is already using the name [{0}]: {1}", (Object) tmp.getName(), tmp.getClass().getSimpleName());
 			return false;
 		}
+		this.resetEntitiesCache();
 		Level.ALL_ENTITIES_ON_MAP++;
 		return this.getEntities().add(e.setLevel(this));
 	}
@@ -462,24 +467,6 @@ public class Level {
 	public Entity getNearestEntity(float tileX, float tileY, float tileRadius, Entity ... exclude) {
 		ArrayList<Entity> ents = getNearbyEntities(tileX, tileY, tileRadius, exclude);
 		return ents.size() > 0 ? ents.get(0) : null;
-		/*
-		 * ArrayList<Entity> excList = new
-		 * ArrayList<Entity>(Arrays.asList(exclude));
-		 * float trSqrd = tileRadius * tileRadius;
-		 * Entity nearest = null;
-		 * float distance = Float.MAX_VALUE;
-		 * float distTmp;
-		 * for(Entity e : getEntities()) {
-		 * if(excList.contains(e) || nearest == e) continue;
-		 * distTmp = MathUtil.distanceSqrd(tileX, tileY, e.getAnchoredTileX(),
-		 * e.getAnchoredTileY());
-		 * if(tileRadius == 0 || (distTmp <= trSqrd && distTmp <= distance)) {
-		 * nearest = e;
-		 * distance = distTmp;
-		 * }
-		 * }
-		 * return nearest;
-		 */
 	}
 	
 	/**
@@ -491,20 +478,29 @@ public class Level {
 	 *         {@link java.util.Collection#remove}.
 	 */
 	public boolean removeEntity(Entity e) {
-		if(this.getEntities().contains(e)) Level.ALL_ENTITIES_ON_MAP--;
+		if(this.getEntities().contains(e)) {
+			Level.ALL_ENTITIES_ON_MAP--;
+			this.resetEntitiesCache();
+		}
 		return this.getEntities().remove(e);
 	}
 	
 	/**
-	 * Gets all {@link Entity}s added to this level. This method has been
-	 * synchronized already.
+	 * Gets all {@link Entity}s added to this level.
 	 * 
 	 * @return An {@code ArrayList<Entity>} object of all entities.
 	 */
-	public synchronized ArrayList<Entity> getEntities() {
+	protected synchronized ArrayList<Entity> getEntities() {
 		synchronized(this.entities) {
 			return this.entities;
 		}
+	}
+	public Entity[] getEntitiesCache() {
+		if(this.entitiesCache == null) this.entitiesCache = this.getEntities().toArray(new Entity[this.getEntities().size()]);
+		return this.entitiesCache;
+	}
+	public void resetEntitiesCache() {
+		this.entitiesCache = null;
 	}
 	
 	/**
@@ -524,6 +520,7 @@ public class Level {
 			Logger.log("OH NO! An item entity is already using the name [{0}]: {1}", (Object) tmp.getName(), tmp.getClass().getSimpleName());
 			return false;
 		}
+		this.resetItemEntitiesCache();
 		Level.ALL_ENTITIES_ON_MAP++;
 		return this.getItemEntities().add((ItemEntity) ie.setLevel(this));
 	}
@@ -568,7 +565,10 @@ public class Level {
 	 *         {@link java.util.Collection#remove}.
 	 */
 	public boolean removeItemEntity(ItemEntity ie) {
-		if(this.getItemEntities().contains(ie)) Level.ALL_ENTITIES_ON_MAP--;
+		if(this.getItemEntities().contains(ie)) {
+			Level.ALL_ENTITIES_ON_MAP--;
+			this.resetItemEntitiesCache();
+		}
 		return this.getItemEntities().remove(ie);
 	}
 	
@@ -579,10 +579,17 @@ public class Level {
 	 * @return An {@code ArrayList<ItemEntity>} object of all itemStack
 	 *         entities.
 	 */
-	public synchronized ArrayList<ItemEntity> getItemEntities() {
+	protected synchronized ArrayList<ItemEntity> getItemEntities() {
 		synchronized(this.itemEntities) {
 			return this.itemEntities;
 		}
+	}
+	public ItemEntity[] getItemEntitiesCache() {
+		if(this.itemEntitiesCache == null) this.itemEntitiesCache = this.getItemEntities().toArray(new ItemEntity[this.getItemEntities().size()]);
+		return this.itemEntitiesCache;
+	}
+	public void resetItemEntitiesCache() {
+		this.itemEntitiesCache = null;
 	}
 	
 	/**
@@ -601,6 +608,7 @@ public class Level {
 			Logger.log("OH NO! A tile entity is already there [{0}]: {1}", tmp.getName(), tmp.getClass().getSimpleName());
 			return false;
 		}
+		this.resetTileEntitiesCache();
 		Level.ALL_TILES_ON_MAP++;
 		return this.getTileEntities().add((TileEntity) te.setLevel(this));
 	}
@@ -630,7 +638,10 @@ public class Level {
 	 *         {@link java.util.Collection#remove}.
 	 */
 	public boolean removeTileEntity(TileEntity te) {
-		if(this.getTileEntities().contains(te)) Level.ALL_TILES_ON_MAP--;
+		if(this.getTileEntities().contains(te)) {
+			Level.ALL_TILES_ON_MAP--;
+			this.resetTileEntitiesCache();
+		}
 		return this.getTileEntities().remove(te);
 	}
 	
@@ -640,10 +651,17 @@ public class Level {
 	 * 
 	 * @return An {@code ArrayList<TileEntity>} object of all entities.
 	 */
-	public synchronized ArrayList<TileEntity> getTileEntities() {
+	protected synchronized ArrayList<TileEntity> getTileEntities() {
 		synchronized(this.tileEntities) {
 			return this.tileEntities;
 		}
+	}
+	public TileEntity[] getTileEntitiesCache() {
+		if(this.tileEntitiesCache == null) this.tileEntitiesCache = this.getTileEntities().toArray(new TileEntity[this.getTileEntities().size()]);
+		return this.tileEntitiesCache;
+	}
+	public void resetTileEntitiesCache() {
+		this.tileEntitiesCache = null;
 	}
 	
 	public boolean addStructure(Structure s) {
@@ -659,6 +677,7 @@ public class Level {
 		for(Entity e : s.getEntities()) addEntity(e);
 		for(TileEntity te : s.getTileEntities()) addTileEntity(te);
 		
+		this.resetStructuresCache();
 		return this.getStructures().add(s);
 	}
 	public Structure getStructure(String uid) {
@@ -676,12 +695,20 @@ public class Level {
 	@Deprecated
 	public boolean removeStructure(Structure s) {
 		// doo some crazy map whizbangery. probably need to call on the generator for the map fix. don't worry too much about this though, it'll probably never ever ever get used.
+		// this.resetStructuresCache(); // lol.
 		return false;
 	}
-	public synchronized ArrayList<Structure> getStructures() {
+	protected synchronized ArrayList<Structure> getStructures() {
 		synchronized(this.structures) {
 			return this.structures;
 		}
+	}
+	public Structure[] getStructuresCache() {
+		if(this.structuresCache == null) this.structuresCache = this.getStructures().toArray(new Structure[this.getStructures().size()]);
+		return this.structuresCache;
+	}
+	public void resetStructuresCache() {
+		this.structuresCache = null;
 	}
 	
 	/**
@@ -710,8 +737,7 @@ public class Level {
 	 * not. This is already called by {@link Level#tick()}.
 	 */
 	public void tickEntities() {
-		Entity[] ents = getEntities().toArray(new Entity[getEntities().size()]);
-		for(Entity e : ents) {
+		for(Entity e : getEntitiesCache()) {
 			e.tick();
 			checkForMapExpansion((int) e.getTileX(), (int) e.getTileY());
 		}

@@ -65,7 +65,7 @@ public abstract class EntityMoving extends Entity {
 	}
 	
 	public void renderDebug(Graphics2D g2d, long camX, long camY, int camW, int camH) {
-		int vectorScale = 10;
+		int vectorScale = 100;
 		AngleSpeed as = getLastMove();
 		g2d.setColor(Color.GREEN);
 		g2d.drawLine((int) (getAnchoredX() - camX), (int) (getAnchoredY() - camY), (int) (getAnchoredX() + as.getXSpeed() * vectorScale - camX), (int) (getAnchoredY() + as.getYSpeed() * vectorScale - camY));
