@@ -226,7 +226,7 @@ public class Level {
 		return castRay(ray, 0);
 	}
 	
-	// See com.brennytizer.zombies.res.raycasting_test.js
+	// See more at https://gist.github.com/TheBrenny/98f8f27ad1bb53f4ee80179f43dbc64b
 	public Ray castRay(Ray ray, int skip) {
 		ray = new Ray(ray); // duplicate so we don't fuck the original
 		if(ray.distance == 0) return ray;

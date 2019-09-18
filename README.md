@@ -15,26 +15,26 @@ JUMG (pronounced 'Jum-Gee', acronymed 'Java Utilities for Making Games') is a li
 As JUMG is in development, it is necessary for a checklist to be made of what needs to be added, and what is added. This is here for simplicity's sake:
 
 #### JUMG Development Checklist:
- 1. [x] Binary File IO (using custom protocols - so text can still be saved)
- 2. [x] String Compression
- 3. [x] Frame and Screen implementation
- 4. [x] Graphical User Interface utilities *(will be continued as I go on...)*
- 5. [ ] Heads Up Display simplicity
- 6. [x] Game Engine
+ 1. [x] [Binary File IO (using custom protocols - so text can still be saved)](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/util/FileIO.java)
+ 2. [ ] String Compression
+ 3. [x] [Frame and Screen implementation](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/Display.java)
+ 4. [x] [Graphical User Interface utilities *(will be continued as I go on...)*](https://github.com/TheBrenny/JUMG-3.0/tree/master/src/com/thebrenny/jumg/gui)
+ 5. [ ] [Heads Up Display simplicity](https://github.com/TheBrenny/JUMG-3.0/tree/master/src/com/thebrenny/jumg/hud)
+ 6. [x] [Game Engine](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/engine/Engine.java)
  7. [ ] Sprite Manager
- 8. [x] Level Manager
- 9. [ ] AI Management *(excluding the path webs)*
+ 8. [x] [Level Manager](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/level/Level.java)
+ 9. [x] [AI (pathfinding and states)](https://github.com/TheBrenny/JUMG-3.0/tree/master/src/com/thebrenny/jumg/entities/ai)
  10. [ ] Sound Manager
- 11. [x] Key Bindings
- 12. [x] Entities
- 13. [ ] Inventory System
+ 11. [x] [Key Bindings](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/input/KeyBindings.java)
+ 12. [x] [Entities](https://github.com/TheBrenny/JUMG-3.0/tree/master/src/com/thebrenny/jumg/entities)
+ 13. [ ] [Inventory System](https://github.com/TheBrenny/JUMG-3.0/tree/master/src/com/thebrenny/jumg/items)
  13. [ ] Save Game System
  14. [ ] Questing System
- 15. [ ] Event System
- 16. [x] Collision detection
+ 15. [x] [Messaging System (not exclusive to entities!)](https://github.com/TheBrenny/JUMG-3.0/tree/master/src/com/thebrenny/jumg/entities/messaging)
+ 16. [x] [Collision detection](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/level/Level.java#L229)
  17. [ ] Networking
  18. [ ] Version control and updating
- 19. [x] Startup Arguments
+ 19. [x] [Startup Arguments](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/util/ArgumentOrganizer.java)
  20. [ ] Bulk Debugging Classes
  21. [ ] Full JavaDocs
  22. [ ] RELEASE!
