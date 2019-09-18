@@ -4,7 +4,7 @@
 
 ### Contents
  1. What is JUMG?
- 2. Why do I need JUMG?
+ 2. Demo Game
  3. How to use JUMG
  4. Extra Notes
 <hr>
@@ -13,8 +13,8 @@
 JUMG (pronounced 'Jum-Gee', acronymed 'Java Utilities for Making Games') is a library that contains multiple utilities to make Java Games the most efficient way. JUMG utilises the concepts of separating certain portions of code from the rest, to allow one main class to bring them altogether.
 
 As JUMG is in development, it is necessary for a checklist to be made of what needs to be added, and what is added. This is here for simplicity's sake:
-<br>
-**JUMG Development Checklist:**
+
+#### JUMG Development Checklist:
  1. [x] Binary File IO (using custom protocols - so text can still be saved)
  2. [x] String Compression
  3. [x] Frame and Screen implementation
@@ -39,24 +39,33 @@ As JUMG is in development, it is necessary for a checklist to be made of what ne
  21. [ ] Full JavaDocs
  22. [ ] RELEASE!
 
-_Currently I'm working on my project for Uni while I continue to work on JUMG. This is because my project depends on JUMG. As I work through, changes will occur and enhancements will be made, thus making the changes on this list seem eratic. Just bear with me._ :ok_hand: 
+> Currently I'm working on my project for Uni while I continue to work on JUMG. This is because my project depends on JUMG. As I work through, changes will occur and enhancements will be made, thus making the changes on this list seem eratic. Just bear with me. :ok_hand:
 
-#### Demo
+### Demo Game
 Check out the demo game which is a project for my Computer Games course at Uni, [BattleCell](https://github.com/TheBrenny/BattleCell)!
 
-#### If you only want some packages:
- 1. Copy the `com.brennytizer.jumg.utils` package to your workspace.
- 2. Copy your wanted packages across.
- 3. The packages should be available for use!
+### How to use JUMG
 
-#### If you want the full library (eclipse):
- PRE-REQ. Make sure the JUMG Library is a project in your workspace.
- 1. Right Click your project > "Build Path" > "Configure Build Path..."
- 2. "Projects" tab > "Add..."
- 3. Tick the JUMG project you have made > OK > OK
- 4. The packages should be available for use!
+#### ~If you only want some packages:~
+ 1. ~Copy the `com.brennytizer.jumg.utils` package to your workspace.~
+ 2. ~Copy your wanted packages across.~
+ 3. ~The packages should be available for use!~
 
-Note that these methods allow you to alter the packages, for your own personalization benefits, or to improve on JUMG. If you do make an improvement or addition that is not personalized, **request a push**!
+_This isn't actually done. Dependencies are everywhere throughout the project._
+
+#### If you want the full library:
+ 1. Eclipse
+    1. Make sure the JUMG Library is a project in your workspace.
+    2. Right Click your project > "Build Path" > "Configure Build Path..."
+    3. "Projects" tab > "Add..."
+    4. Tick the JUMG project you have made > OK > OK
+    5. The packages should be available for use!
+ 2. VSCode
+    1. Create a Workspace in VSCode and make sure the JUMG Library is a project in it.
+    2. In your project, open the `.classpath` file and add the following line: `<classpathentry combineaccessrules="false" kind="src" path="/JUMG 3.0"/>`
+    3. You should now be able to use and modify JUMG!
+
+Note that these methods allow you to alter the packages, for your own personalization benefits, or to improve on JUMG. If you do make an improvement or addition that is not personalized, **submit a PR!**
 
 ### Extra Notes
 JUMG is an open source tool that is freely available for modifications. Take it and throw it into eclipse, but remember that it would be nice that if you muddle around with it, that if you could throw a push request to the current JUMG build, here on GitHub.

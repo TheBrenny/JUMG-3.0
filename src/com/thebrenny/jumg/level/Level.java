@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import com.thebrenny.jumg.entities.Entity;
+import com.thebrenny.jumg.entities.EntityLiving;
 import com.thebrenny.jumg.entities.IHealable;
 import com.thebrenny.jumg.gui.Screen;
 import com.thebrenny.jumg.items.ItemEntity;
@@ -467,6 +468,21 @@ public class Level {
 	public Entity getNearestEntity(float tileX, float tileY, float tileRadius, Entity ... exclude) {
 		ArrayList<Entity> ents = getNearbyEntities(tileX, tileY, tileRadius, exclude);
 		return ents.size() > 0 ? ents.get(0) : null;
+	}
+	
+	public EntityLiving[] getAliveEntities() {
+		EntityLiving[] ret = new EntityLiving[0];
+		EntityLiving el;
+		for(Entity e : getEntities()) {
+			if(e instanceof EntityLiving) {
+				el = (EntityLiving) e;
+				if(el.isAlive()) {
+					ret = Arrays.copyOf(ret, ret.length + 1);
+					ret[ret.length - 1] = el;
+				}
+			}
+		}
+		return ret;
 	}
 	
 	/**

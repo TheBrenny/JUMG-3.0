@@ -28,6 +28,7 @@ import com.thebrenny.jumg.util.Logger;
  * @date 01 Aug 19
  */
 public abstract class MainGame {
+	/** The global instance of the game. */
 	private static MainGame INSTANCE;
 	/** The default scale of the game window. */
 	private static float DEFAULT_SCALE = 1.0F;

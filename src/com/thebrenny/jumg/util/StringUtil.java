@@ -28,7 +28,7 @@ public class StringUtil {
 	public static String getStringList(Object[] o, String delimiter) {
 		String ret = "";
 		for(Object oo : o) ret += oo.toString() + delimiter;
-		return ret;
+		return ret.substring(0, Math.max(0, ret.length() - delimiter.length()));
 	}
 	
 	public static String padTo(String word, int amount, String padding, boolean append) {
