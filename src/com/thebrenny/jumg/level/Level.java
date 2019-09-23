@@ -316,6 +316,48 @@ public class Level {
 		return ray;
 	}
 	
+	public Point2D getNearestWalkableTile(float x, float y, float shiftMultiplier) {
+		Tile tile = getTileRelative(x, y, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x, y);
+		
+		tile = getTileRelative(x, y - shiftMultiplier, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x, y - shiftMultiplier);
+		
+		tile = getTileRelative(x + shiftMultiplier, y, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x + shiftMultiplier, y);
+		
+		tile = getTileRelative(x, y + shiftMultiplier, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x, y + shiftMultiplier);
+		
+		tile = getTileRelative(x - shiftMultiplier, y, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x - shiftMultiplier, y);
+		
+		tile = getTileRelative(x - shiftMultiplier, y - shiftMultiplier, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x - shiftMultiplier, y - shiftMultiplier);
+		
+		tile = getTileRelative(x + shiftMultiplier, y - shiftMultiplier, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x + shiftMultiplier, y - shiftMultiplier);
+		
+		tile = getTileRelative(x + shiftMultiplier, y + shiftMultiplier, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x + shiftMultiplier, y + shiftMultiplier);
+		
+		tile = getTileRelative(x - shiftMultiplier, y + shiftMultiplier, true);
+		if(tile != null && tile.canTraverseOnFoot()) return new Point2D.Float(x - shiftMultiplier, y + shiftMultiplier);
+		
+		return null;
+	}
+	public Point2D getNearestWalkableTile(float x, float y) {
+		Point2D tile = null;
+		int multiplier = 1;
+		while(tile == null) {
+			tile = getNearestWalkableTile(x, y, multiplier);
+			multiplier++;
+		}
+		return tile;
+	}
+	public Point2D getNearestWalkableTile(Point2D p) {
+		return getNearestWalkableTile((float) p.getX(), (float) p.getY());
+	}
 	/**
 	 * Determines if the two tiles are unobstructed, regardless of distance.
 	 * 
@@ -349,7 +391,6 @@ public class Level {
 		
 		return true;
 	}
-	
 	/**
 	 * Checks to see if each pair of points are unobstructed, regardless of
 	 * distance.

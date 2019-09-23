@@ -52,6 +52,7 @@ public abstract class MainGame {
 	protected Display display;
 	protected Handler handler;
 	protected Engine engine;
+	protected int engineTicks = 60;
 	
 	protected boolean debugging = false;
 	protected boolean running = false;
@@ -215,7 +216,7 @@ public abstract class MainGame {
 	 */
 	private void start() {
 		Logger.startSection("enginePrep", "Creating engine.");
-		INSTANCE.engine = new Engine();
+		INSTANCE.engine = new Engine(engineTicks);
 		new Thread(INSTANCE.engine).start();
 		Logger.endSection("enginePrep", "Engine created and started.");
 	}

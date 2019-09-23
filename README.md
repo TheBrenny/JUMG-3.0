@@ -47,11 +47,11 @@ Check out the demo game which is a project for my Computer Games course at Uni, 
 ### How to use JUMG
 
 #### ~If you only want some packages:~
- 1. ~Copy the `com.brennytizer.jumg.utils` package to your workspace.~
+ 1. ~Copy the `com.thebrenny.jumg.utils` package to your workspace.~
  2. ~Copy your wanted packages across.~
  3. ~The packages should be available for use!~
 
-_This isn't actually done. Dependencies are everywhere throughout the project._
+_This isn't actually possible. Dependencies are everywhere throughout the project._
 
 #### If you want the full library:
  1. Eclipse

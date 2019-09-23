@@ -138,6 +138,7 @@ public class ChunkMap {
 	 */
 	public Chunk getChunkRelative(int x, int y) {
 		Point p = relativeToAbsolute(x, y);
+		if(p.x < 0 || p.x >= chunks.size() || p.y < 0 || p.y >= chunks.get(p.x).size()) return null;
 		return chunks.get(p.x).get(p.y);
 	}
 	
@@ -177,7 +178,8 @@ public class ChunkMap {
 		int chunkY = Math.floorDiv(y, Chunk.CHUNK_SIZE);
 		x = MathUtil.wrap(0, x, Chunk.CHUNK_SIZE);
 		y = MathUtil.wrap(0, y, Chunk.CHUNK_SIZE);
-		return getChunkRelative(chunkX, chunkY).getTile(x, y);
+		Chunk c = getChunkRelative(chunkX, chunkY);
+		return c == null ? null : c.getTile(x, y);
 	}
 	
 	/**
