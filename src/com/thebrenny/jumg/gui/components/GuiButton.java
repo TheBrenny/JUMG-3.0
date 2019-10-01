@@ -17,11 +17,18 @@ public class GuiButton extends Component {
 	
 	public GuiButton(float x, float y, float width, float height, String str, Runnable run) {
 		super(x, y, width, height, run);
-		this.label = new GuiLabel((float) getWidth() / 2, (float) getHeight() / 2, str, GuiLabel.BUTTON_FONT).allign(GuiLabel.ALLIGN_CENTRE);
+		this.label = new GuiLabel((float) getWidth() / 2, (float) getHeight() / 2, str, GuiLabel.BUTTON_FONT).align(GuiLabel.ALIGN_CENTRE);
 	}
 	
-	public Component resize(float width, float height) {
+	public GuiButton move(float x, float y) {
+		super.move(x, y);
+		this.label.move((float) getWidth() / 2, (float) getHeight() / 2);
+		requestNewImage();
+		return this;
+	}
+	public GuiButton resize(float width, float height) {
 		super.resize(width, height);
+		this.label.move((float) getWidth() / 2, (float) getHeight() / 2);
 		requestNewImage();
 		return this;
 	}

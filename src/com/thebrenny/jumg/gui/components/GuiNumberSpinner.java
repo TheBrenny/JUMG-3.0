@@ -27,27 +27,43 @@ public class GuiNumberSpinner extends Component {
 		
 		downButton = new GuiButton(x, y, height, height, "↓", new Runnable() {
 			public void run() {
+				GuiNumberSpinner.this.readCurrentNumber();
 				GuiNumberSpinner.this.changeNumber(-1);
 			}
 		});
 		
 		spinnerText = new GuiTextBox(x + height, y, width - 2 * height, height, "0");
-		spinnerText.ASCII = "1234567890";
+		spinnerText.setASCII("-1234567890");
+		spinnerText.getGuiLabel().align(GuiLabel.ALIGN_CENTRE).move((float) spinnerText.getWidth() / 2, (float) spinnerText.getHeight() / 2);
 		
 		upButton = new GuiButton(x + width - height, y, height, height, "↑", new Runnable() {
 			public void run() {
+				GuiNumberSpinner.this.readCurrentNumber();
 				GuiNumberSpinner.this.changeNumber(1);
 			}
 		});
 		
 		if(height > width) {
-			upButton.setRect(x, y, width, width);
-			spinnerText.setRect(x, y + width, width, height - 2 * width);
-			downButton.setRect(x, y + height - width, width, width);
+			upButton.move(x, y).resize(width, width);
+			spinnerText.move(x, y + width).resize(width, height - 2 * width);
+			downButton.move(x, y + height - width).resize(width, width);
 		}
+		components.add(spinnerText);
 		components.add(upButton);
 		components.add(downButton);
-		components.add(spinnerText);
+	}
+	
+	public Component move(float x, float y) {
+		if(height > width) {
+			upButton.move(x, y);
+			spinnerText.move(x, y + width);
+			downButton.move(x, y + height - width);
+		} else {
+			downButton.move(x, y);
+			spinnerText.move(x + height, y);
+			upButton.move(x + width - height, y);
+		}
+		return super.move(x, y);
 	}
 	
 	public GuiNumberSpinner setMinMax(Integer min, Integer max) {
@@ -56,13 +72,23 @@ public class GuiNumberSpinner extends Component {
 		return this;
 	}
 	
+	public void tick() {
+		if(this.spinnerText.isSelected()) readCurrentNumber();
+	}
+
+	public GuiNumberSpinner readCurrentNumber() {
+		try {
+			return setNumber(Integer.parseInt(this.spinnerText.getString()));
+		} catch (Exception e) {
+			return this.setNumber(0);
+		}
+	}
 	public GuiNumberSpinner changeNumber(int amount) {
 		return setNumber(this.number + amount);
 	}
-	
 	public GuiNumberSpinner setNumber(int number) {
 		this.number = MathUtil.clamp(this.min, number, this.max);
-		spinnerText.setString("" + number);
+		spinnerText.setString("" + this.number);
 		return this;
 	}
 	public int getNumber() {

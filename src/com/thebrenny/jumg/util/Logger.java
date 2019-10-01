@@ -13,14 +13,13 @@ public class Logger {
 	private static int LOG_CALLER_LENGTH = 0;
 	private static int PAC_CALLER_LENGTH = 0;
 	
-	public static void log(String message, Object...objects) {
+	public static void log(String message, Object ... objects) {
 		log(StringUtil.insert(message, objects), 1);
 	}
-	public static void log(String ... messages) {
-		for(String s : messages)
-			log(s, 1);
+
+	public static void log(String msg) {
+		log(msg, 1);
 	}
-	
 	public static void log(String message, int stackTraceShift) {
 		if(canLogOutput()) {
 			StackTraceElement ste = Thread.currentThread().getStackTrace()[2 + stackTraceShift];

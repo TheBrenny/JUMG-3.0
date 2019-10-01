@@ -3,21 +3,19 @@ package com.thebrenny.jumg.gui.components;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
-public class GuiListSelector extends Component {
+public class GuiListSelector extends GuiList {
 	private static final long serialVersionUID = 1L;
-	public GuiListItem[] items;
 	protected boolean multiSelect;
 	
-	public GuiListSelector(float x, float y, float width, float height, boolean multiSelect, int capacity) {
-		super(x, y, width, height);
+	public GuiListSelector(float x, float y, float width, float height, int capacity, boolean multiSelect) {
+		super(x, y, width, height, capacity);
 		super.run = new Runnable() {
 			public void run() {
 				//GuiListSelector.this.itemClicked(Handler.mousePoint);
 			}
 		};
-		items = new GuiListItem[capacity];
 		this.multiSelect = multiSelect;
 	}
 	
@@ -25,7 +23,7 @@ public class GuiListSelector extends Component {
 		float itemWidth = (float) (this.getWidth() - 7);
 		float itemHeight = (float) ((this.getHeight() - 7) / this.items.length);
 		for(int i = 0; i < items.length; i++) {
-			this.items[i] = new GuiListItem(0, itemHeight * i, itemWidth, itemHeight, items[i]);
+			this.items[i] = new GuiListSelectorItem(0, itemHeight * i, itemWidth, itemHeight, items[i]);
 		}
 		this.requestNewImage();
 		return this;
@@ -47,46 +45,45 @@ public class GuiListSelector extends Component {
 		this.requestNewImage();
 	}
 	public void selectItem(int index) {
-		if(this.multiSelect) items[index].selected(!items[index].isSelected());
+		if(!(this.items[index] instanceof GuiListSelectorItem)) return;
+		GuiListSelectorItem item = (GuiListSelectorItem) this.items[index];
+		if(this.multiSelect) item.selected(!item.isSelected());
 		else {
 			for(int i = 0; i < items.length; i++) {
-				if(items[i] == null) continue;
-				if(index == i) {
-					items[i].selected(index == i);
-					break;
-				}
+				if(items[i] == null || !(items[i] instanceof GuiListSelectorItem)) continue;
+				((GuiListSelectorItem) items[i]).selected(index == i);
 			}
 		}
 		this.requestNewImage();
 	}
-	
-	public BufferedImage getNewImage() {
-		BufferedImage bi = new BufferedImage((int) getWidth(), (int) getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = bi.createGraphics();
-		
-		g2d.setColor(new Color(70, 70, 70));
-		g2d.fillRect(0, 0, bi.getWidth(), bi.getHeight());
-		g2d.setColor(Color.BLACK);
-		g2d.fillRect(2, 2, bi.getWidth() - 5, bi.getHeight() - 5);
-		
-		for(GuiListItem l : this.items) {
-			if(l == null) continue;
-			l.render(g2d, 2, 2);
+
+	public int[] getSelectedIndexes() {
+		int[] indexes = new int[0];
+		for(int i = 0; i < items.length; i++) {
+			if(items[i] == null || !(items[i] instanceof GuiListSelectorItem)) continue;
+			if(((GuiListSelectorItem) items[i]).isSelected()) {
+				indexes = Arrays.copyOf(indexes, indexes.length+1);
+				indexes[indexes.length-1] = i;
+			}
 		}
-		
-		g2d.dispose();
-		return bi;
+		return indexes;
+	}
+
+	public GuiListSelectorItem[] getSelectedItems() {
+		int[] indexes = getSelectedIndexes();
+		GuiListSelectorItem[] items = new GuiListSelectorItem[indexes.length];
+		for(int i = 0; i < indexes.length; i++) {
+			items[i] = (GuiListSelectorItem) getItem(i);
+		}
+		return items;
 	}
 	
-	public class GuiListItem extends GuiLabel {
+	public class GuiListSelectorItem extends GuiList.GuiListItem {
 		private static final long serialVersionUID = 1L;
 		protected boolean selected = false;
 		
-		public GuiListItem(float x, float y, float width, float height, String string) {
-			super(x, y, string);
-			super.resize(width, height);
-			this.allign(ALLIGN_HORIZONTAL_LEFT, ALLIGN_VERTICAL_CENTRE);
-			this.setColor(Color.WHITE);
+		public GuiListSelectorItem(float x, float y, float width, float height, String string) {
+			super(x, y, width, height, string);
 		}
 		
 		public void selected(boolean selected) {
@@ -96,16 +93,12 @@ public class GuiListSelector extends Component {
 			return this.selected;
 		}
 		
-		public float getMaxAllignedY() {
-			float yOff = getAllignment()[1].equalsIgnoreCase(ALLIGN_VERTICAL_BOTTOM) ? 1.0F : getAllignment()[1].equalsIgnoreCase(ALLIGN_VERTICAL_CENTRE) ? 0.5F : 0.0F;
-			return (float) (getY() + (getMaxHeight() - getSingleHeight()) * yOff);
-		}
-		public void drawMe(Graphics2D g2d, int xOffset, int yOffset) {
+		public void highlightMe(Graphics2D g2d, int xOffset, int yOffset) {
 			g2d.setColor(Color.CYAN);
 			g2d.fillRect((int) getX() + xOffset, (int) getY() + yOffset, (int) this.getWidth(), (int) this.getHeight());
 		}
 		public void render(Graphics2D g2d, int xOffset, int yOffset) {
-			if(selected) drawMe(g2d, xOffset, yOffset);
+			if(selected) highlightMe(g2d, xOffset, yOffset);
 			super.render(g2d, xOffset, yOffset);
 		}
 	}

@@ -48,6 +48,12 @@ public class Postman {
 			return listeners.add(listener);
 		}
 	}
+	public boolean unregisterListener(MessageListener<?> listener) {
+		synchronized(listeners) {
+			Logger.log("Unregistering listener: " + listener.toString());
+			return listeners.remove(listener);
+		}
+	}
 	
 	public static Postman getInstance() {
 		if(Postman.POSTMAN_PAT == null) new Postman();

@@ -21,7 +21,9 @@ public abstract class Component extends Rectangle2D.Float {
 		this(x, y, width, height, null);
 	}
 	public Component(float x, float y, float width, float height, Runnable run) {
-		super(x, y, width, height);
+		// translate using width and height
+		// why + width and + height? because width and height are negative. plussing a negative is minus a positive!
+		super(width < 0 ? x + width : x, height < 0 ? y + height : y, Math.abs(width), Math.abs(height));
 		this.run = run;
 	}
 	
@@ -75,8 +77,12 @@ public abstract class Component extends Rectangle2D.Float {
 		super.setRect(x, y, this.width, this.height);
 		return this;
 	}
+	public Component translate(float x, float y) {
+		return this.move(this.x + x, this.y + y);
+	}
 	
-	public void tick() {}
+	public void tick() {
+	}
 	public void render(Graphics2D g2d, long xOffset, long yOffset) {
 		g2d.drawImage(getImage(), (int) (getX() - xOffset), (int) (getY() - yOffset), null);
 	}

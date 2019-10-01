@@ -13,12 +13,12 @@ import com.thebrenny.jumg.util.StringUtil;
 
 public class GuiTextBox extends Component implements InputStealer {
 	private static final long serialVersionUID = 1L;
-	public String ASCII = StringUtil.ASCII;
-	public boolean selected = false;
-	public boolean loseInput = false;
-	public GuiLabel text;
-	public int blinker = 0;
-	public int cursor;
+	private String ASCII = StringUtil.ASCII;
+	private boolean selected = false;
+	private boolean loseInput = false;
+	private GuiLabel text;
+	private int blinker = 0;
+	private int cursor;
 	
 	public GuiTextBox(float x, float y, float width, float height, String defText) {
 		super(x, y, width, height);
@@ -33,10 +33,14 @@ public class GuiTextBox extends Component implements InputStealer {
 				}
 			}
 		};
-		text = new GuiLabel(3, height / 2, defText, GuiLabel.BUTTON_FONT).allign(GuiLabel.ALLIGN_HORIZONTAL_LEFT, GuiLabel.ALLIGN_VERTICAL_CENTRE).setColor(Color.WHITE);
+		text = new GuiLabel(3, height / 2, defText, GuiLabel.BUTTON_FONT).align(GuiLabel.ALIGN_HORIZONTAL_LEFT, GuiLabel.ALIGN_VERTICAL_CENTRE).setColor(Color.WHITE);
 		cursor = defText.length();
 	}
-	
+	public GuiTextBox setASCII(String ascii) {
+		ASCII = ascii;
+		return this;
+	}
+
 	public void changeMe(boolean hover, boolean clicked, Point mousePoint) {
 		if(enabled) {
 			if(hover) {
@@ -101,6 +105,9 @@ public class GuiTextBox extends Component implements InputStealer {
 			break;
 		}
 	}
+	public boolean isSelected() {
+		return this.selected;
+	}
 	
 	public void shiftCursor(int amount) {
 		placeCursor(cursor + amount);
@@ -136,9 +143,26 @@ public class GuiTextBox extends Component implements InputStealer {
 	}
 	public void removeAll() {
 		text.setString(0, "");
+		cursor = 0;
 		this.requestNewImage();
 	}
 	
+	public GuiTextBox move(float x, float y) {
+		super.move(x,y);
+		this.text.move((float) getWidth() / 2, (float) getHeight() / 2);
+		requestNewImage();
+		return this;
+	}
+	public GuiTextBox resize(float width, float height) {
+		super.resize(width, height);
+		this.text.move((float) getWidth() / 2, (float) getHeight() / 2);
+		requestNewImage();
+		return this;
+	}
+
+	public GuiLabel getGuiLabel() {
+		return text;
+	}
 	public String getString() {
 		return this.text.getString(0);
 	}
@@ -162,9 +186,11 @@ public class GuiTextBox extends Component implements InputStealer {
 		
 		if(blinker > 20) {
 			g2d.setColor(Color.ORANGE);
-			g2d.fillRect((int) (text.getSubstringWidth(0, 0, cursor)) + 3, (int) (text.getAllignedY(0)) + 7, 1, (int) text.getSingleHeight());
+			g2d.fillRect((int) (text.getSubstringWidth(0, 0, cursor) + text.getX()), 10, 1, bi.getHeight() - 20);
 		}
-
+		
+		text.render(g2d, 0, 0);
+		
 		g2d.dispose();
 		return bi;
 	}

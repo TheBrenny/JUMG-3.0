@@ -171,7 +171,7 @@ public abstract class Entity {
 		return false;
 	}
 	public boolean canSeeTile(float x, float y, float distance) {
-		Point p = Level.roundTileCoords(x,y);
+		Point p = Level.roundTileCoords(x, y);
 		return canSee(p.x, p.y, Tile.TILE_SIZE, Tile.TILE_SIZE, distance);
 	}
 	public boolean canSeeEntity(Entity e, float distance) {
@@ -182,7 +182,12 @@ public abstract class Entity {
 	public void render(Graphics2D g2d, long camX, long camY, int camW, int camH) {
 		g2d.drawImage(getImage(), (int) (getX() - camX), (int) (getY() - camY), null);
 	}
-	public void renderDebug(Graphics2D g2d, long camX, long camY, int camW, int camH) {}
+	public void renderDebug(Graphics2D g2d, long camX, long camY, int camW, int camH) {
+	}
+	
+	public String toString() {
+		return StringUtil.insert(this.getClass().getSimpleName() + "{id:{}, name:{}, bb:[{},{},{},{}]}", this.id, this.name, this.getAnchoredTileX(), this.getAnchoredTileY(), this.getWidth(), this.getHeight());
+	}
 	
 	public static void setEntityMap(String entityMap, int entitySize) {
 		Entity.ENTITY_MAP = Images.getImage(entityMap);

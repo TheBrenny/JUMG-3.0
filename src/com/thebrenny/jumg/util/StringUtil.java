@@ -12,10 +12,18 @@ public class StringUtil {
 	
 	public static String insert(String main, Object ... values) {
 		String target = "";
+		int valIndex = 0;
+		
+		// This allows us to do things like insert("{}{}{}", 1, 2, 3) => "123".
+		while(main.contains("{}")) {
+			main = main.replaceFirst("\\{\\}", values[Math.min(valIndex++, values.length - 1)].toString());
+		}
+		
 		for(int arrIndex = 0; arrIndex < values.length; arrIndex++) {
 			target = "{" + arrIndex + "}";
 			if(main.contains(target)) main = main.replace(target, values[arrIndex].toString());
 		}
+		
 		return main;
 	}
 	

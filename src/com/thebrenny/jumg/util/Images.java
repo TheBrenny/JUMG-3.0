@@ -50,12 +50,15 @@ public class Images {
 		}
 		return image.getSubimage(x * multiplierX, y * multiplierY, width, height);
 	}
-	public static Image getResizedImage(BufferedImage image, float multiplier) {
+	public static BufferedImage getResizedImage(BufferedImage image, int width, int height) {
+		return Images.toBufferedImage(image.getScaledInstance(width, height, Image.SCALE_FAST));
+	}
+	public static BufferedImage getResizedImage(BufferedImage image, float multiplier) {
 		float newWidth = image.getWidth() * multiplier;
 		float newHeight = image.getHeight() * multiplier;
-		return image.getScaledInstance((int) newWidth, (int) newHeight, Image.SCALE_FAST);
+		return Images.toBufferedImage(image.getScaledInstance((int) newWidth, (int) newHeight, Image.SCALE_FAST));
 	}
-	public static Image encode(BufferedImage image, String encoding) {
+	public static BufferedImage encode(BufferedImage image, String encoding) {
 		Image im = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		try {
 			ImageOutputStream ios = ImageIO.createImageOutputStream(im);
@@ -63,7 +66,17 @@ public class Images {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		return im;
+		return Images.toBufferedImage(im);
+	}
+	public static BufferedImage toBufferedImage(Image image) {
+		if(image instanceof BufferedImage) return (BufferedImage) image;
+		BufferedImage bi = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		
+		Graphics2D g = bi.createGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+
+		return bi;
 	}
 	public static final BufferedImage recolour(BufferedImage bi, Color color) {
 		BufferedImage newBi = new BufferedImage(bi.getWidth(), bi.getHeight(), BufferedImage.TYPE_INT_ARGB);

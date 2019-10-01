@@ -10,14 +10,14 @@ import com.thebrenny.jumg.util.MathUtil;
 
 public class GuiLabel extends Component {
 	private static final long serialVersionUID = 1L;
-	public static final String ALLIGN_HORIZONTAL_LEFT = "left";
-	public static final String ALLIGN_HORIZONTAL_CENTRE = "centre";
-	public static final String ALLIGN_HORIZONTAL_RIGHT = "right";
-	public static final String ALLIGN_VERTICAL_TOP = "top";
-	public static final String ALLIGN_VERTICAL_CENTRE = "centre";
-	public static final String ALLIGN_VERTICAL_BOTTOM = "bottom";
-	public static final String ALLIGN_TOP_LEFT = ALLIGN_HORIZONTAL_LEFT + ":" + ALLIGN_VERTICAL_TOP;
-	public static final String ALLIGN_CENTRE = ALLIGN_HORIZONTAL_CENTRE + ":" + ALLIGN_VERTICAL_CENTRE;
+	public static final String ALIGN_HORIZONTAL_LEFT = "left";
+	public static final String ALIGN_HORIZONTAL_CENTRE = "centre";
+	public static final String ALIGN_HORIZONTAL_RIGHT = "right";
+	public static final String ALIGN_VERTICAL_TOP = "top";
+	public static final String ALIGN_VERTICAL_CENTRE = "centre";
+	public static final String ALIGN_VERTICAL_BOTTOM = "bottom";
+	public static final String ALIGN_TOP_LEFT = ALIGN_HORIZONTAL_LEFT + ":" + ALIGN_VERTICAL_TOP;
+	public static final String ALIGN_CENTRE = ALIGN_HORIZONTAL_CENTRE + ":" + ALIGN_VERTICAL_CENTRE;
 	
 	public static Font BUTTON_FONT = new Font("Terminal", Font.BOLD, 16);
 	public static Font TITLE_FONT = new Font("Terminal", Font.BOLD, 40);
@@ -44,7 +44,7 @@ public class GuiLabel extends Component {
 		if(font == null) font = BODY_FONT;
 		this.font = font;
 		this.color = Color.BLACK;
-		this.allignment = ALLIGN_TOP_LEFT.split(":");
+		this.allignment = ALIGN_TOP_LEFT.split(":");
 		BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
 		this.fontMets = g2d.getFontMetrics(font);
@@ -74,13 +74,13 @@ public class GuiLabel extends Component {
 		this.requestNewImage();
 		return this;
 	}
-	public GuiLabel allign(String allign) {
+	public GuiLabel align(String allign) {
 		if(allign.contains(":")) this.allignment = allign.split(":");
 		this.fixBounds();
 		return this;
 	}
-	public GuiLabel allign(String allignHorizontal, String allignVertical) {
-		return this.allign(allignHorizontal + ":" + allignVertical);
+	public GuiLabel align(String alignHorizontal, String alignVertical) {
+		return this.align(alignHorizontal + ":" + alignVertical);
 	}
 	
 	public void setString(int line, String s) {
@@ -113,19 +113,19 @@ public class GuiLabel extends Component {
 	}
 	
 	public float getAllignedX(int line) {
-		float xOff = allignment[0].equalsIgnoreCase(ALLIGN_HORIZONTAL_RIGHT) ? 1 : allignment[0].equalsIgnoreCase(ALLIGN_HORIZONTAL_CENTRE) ? 0.5F : 0;
+		float xOff = allignment[0].equalsIgnoreCase(ALIGN_HORIZONTAL_RIGHT) ? 1 : allignment[0].equalsIgnoreCase(ALIGN_HORIZONTAL_CENTRE) ? 0.5F : 0;
 		return ((float) getWidth() - getWidth(line)) * xOff;
 	}
 	public float getAllignedY(int line) {
-		float yOff = allignment[1].equalsIgnoreCase(ALLIGN_VERTICAL_BOTTOM) ? 1 : allignment[1].equalsIgnoreCase(ALLIGN_VERTICAL_CENTRE) ? 0.5F : 0;
+		float yOff = allignment[1].equalsIgnoreCase(ALIGN_VERTICAL_BOTTOM) ? 1 : allignment[1].equalsIgnoreCase(ALIGN_VERTICAL_CENTRE) ? 0.5F : 0;
 		return ((float) getHeight() - getSingleHeight()) * yOff;
 	}
 	public float getMaxAllignedX() {
-		float xOff = allignment[0].equalsIgnoreCase(ALLIGN_HORIZONTAL_RIGHT) ? getMaxWidth() : allignment[0].equalsIgnoreCase(ALLIGN_HORIZONTAL_CENTRE) ? getMaxWidth() / 2 : 0;
+		float xOff = allignment[0].equalsIgnoreCase(ALIGN_HORIZONTAL_RIGHT) ? getMaxWidth() : allignment[0].equalsIgnoreCase(ALIGN_HORIZONTAL_CENTRE) ? getMaxWidth() / 2 : 0;
 		return xOff;//(float) getX() - xOff;
 	}
 	public float getMaxAllignedY() {
-		float yOff = allignment[1].equalsIgnoreCase(ALLIGN_VERTICAL_BOTTOM) ? getMaxHeight() : allignment[1].equalsIgnoreCase(ALLIGN_VERTICAL_CENTRE) ? getMaxHeight() / 2 : 0;
+		float yOff = allignment[1].equalsIgnoreCase(ALIGN_VERTICAL_BOTTOM) ? getMaxHeight() : allignment[1].equalsIgnoreCase(ALIGN_VERTICAL_CENTRE) ? getMaxHeight() / 2 : 0;
 		return yOff;//(float) getY() - yOff;
 	}
 	public float getWidth(int line) {
@@ -157,10 +157,20 @@ public class GuiLabel extends Component {
 		}
 		return bi;
 	}
-	
+
+	public Component move(float x, float y) {
+		this.realX = x;
+		this.realY = y;
+		this.fixBounds();
+		return this;
+	}
+	public Component translate(float x, float y) {
+		return this.move(this.realX + x, this.realY + y);
+	}
+
 	public void fixBounds() {
 		this.resize(getMaxWidth(), getMaxHeight());
-		this.move(realX - getMaxAllignedX(), realY - getMaxAllignedY());
+		super.move(realX - getMaxAllignedX(), realY - getMaxAllignedY());
 		this.requestNewImage();
 	}
 }
