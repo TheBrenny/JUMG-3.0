@@ -7,6 +7,11 @@ import java.awt.image.BufferedImage;
 
 public abstract class Component extends Rectangle2D.Float {
 	private static final long serialVersionUID = 1L;
+	/**
+	 * TODO: Change this to an event system, so that you have an abstract
+	 * ComponentEvent with details of the mouse and stuff, and then you can
+	 * extends it for particular events.
+	 */
 	protected Runnable run;
 	protected boolean enabled = true;
 	protected boolean hovering;

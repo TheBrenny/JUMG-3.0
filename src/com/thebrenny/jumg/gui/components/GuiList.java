@@ -6,7 +6,13 @@ import java.awt.image.BufferedImage;
 
 public class GuiList extends Component {
 	private static final long serialVersionUID = 1L;
-	public GuiListItem[] items;
+	protected GuiListItem[] items;
+	/**
+	 * This counts how many items are actually in the array. When we shift items
+	 * right in {@link #requestNewImage()} this tells us when we'll hit the
+	 * infinite loop of shifting nulls.
+	 */
+	protected int itemCount = 0;
 	
 	// TODO: Make this scrollable!!
 	
@@ -18,13 +24,35 @@ public class GuiList extends Component {
 	public GuiList addToList(String ... items) {
 		float itemWidth = (float) (this.getWidth() - 7);
 		float itemHeight = (float) ((this.getHeight() - 7) / this.items.length);
+		for(int i = 0; i < items.length && itemCount < this.items.length; i++) {
+			this.items[itemCount] = new GuiListItem(0, itemHeight * itemCount, itemWidth, itemHeight, items[i]);
+			itemCount++;
+		}
+		this.requestNewImage();
+		return this;
+	}
+	public GuiList removeFromList(String ... items) {
 		for(int i = 0; i < items.length; i++) {
-			this.items[i] = new GuiListItem(0, itemHeight * i, itemWidth, itemHeight, items[i]);
+			for(int j = 0; j < this.items.length; j++) {
+				if(items[i] != null && this.items[j] != null && this.items[j].getString(0).equals(items[i])) {
+					this.items[i] = null;
+					itemCount--;
+				}
+			}
 		}
 		this.requestNewImage();
 		return this;
 	}
 	
+	public boolean hasItem(String value) {
+		return indexOf(value) != -1;
+	}
+	public int indexOf(String value) {
+		for(int i = 0; i < this.items.length; i++) {
+			if(value.equals(this.items[i].getString(0))) return i;
+		}
+		return -1;
+	}
 	public GuiListItem getItem(int index) {
 		if(index < 0 || index >= items.length) throw new IndexOutOfBoundsException();
 		return items[index];
@@ -41,11 +69,24 @@ public class GuiList extends Component {
 		
 		for(GuiListItem l : this.items) {
 			if(l == null) continue;
-			l.render(g2d, 2, 2);
+			l.render(g2d, 3, 3);
 		}
 		
 		g2d.dispose();
 		return bi;
+	}
+	
+	public void requestNewImage() {
+		for(int i = 0; i < this.items.length - 1 && i < itemCount; i++) {
+			if(this.items[i] == null) {
+				for(int j = 0; j < this.items.length - 1; j++) {
+					this.items[j] = this.items[j + 1];
+				}
+				this.items[this.items.length - 1] = null;
+				i--;
+			}
+		}
+		super.requestNewImage();
 	}
 	
 	public class GuiListItem extends GuiLabel {

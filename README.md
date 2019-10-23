@@ -32,7 +32,7 @@ As JUMG is in development, it is necessary for a checklist to be made of what ne
  14. [ ] Questing System
  15. [x] [Messaging System (not exclusive to entities!)](https://github.com/TheBrenny/JUMG-3.0/tree/master/src/com/thebrenny/jumg/entities/messaging)
  16. [x] [Collision detection](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/level/Level.java#L229)
- 17. [ ] Networking
+ 17. [x] [Networking](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/net)
  18. [ ] Version control and updating
  19. [x] [Startup Arguments](https://github.com/TheBrenny/JUMG-3.0/blob/master/src/com/thebrenny/jumg/util/ArgumentOrganizer.java)
  20. [ ] Bulk Debugging Classes

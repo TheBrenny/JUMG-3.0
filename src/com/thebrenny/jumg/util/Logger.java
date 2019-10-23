@@ -16,7 +16,6 @@ public class Logger {
 	public static void log(String message, Object ... objects) {
 		log(StringUtil.insert(message, objects), 1);
 	}
-
 	public static void log(String msg) {
 		log(msg, 1);
 	}
@@ -30,16 +29,40 @@ public class Logger {
 		}
 	}
 	
-	public static void logPacket(DatagramPacket packet) {
+	public static void logPacket(boolean inbound, String address, String port, String message) {
 		if(canLogOutput()) {
-			String pacCaller = "[" + packet.getAddress().getHostName() + ":" + packet.getPort() + "] ";
+			String pacCaller = "[" + (inbound ? "IN FROM " : "OUT TO  ") + address + ":" + port + "] ";
 			if(pacCaller.length() < PAC_CALLER_LENGTH) pacCaller = StringUtil.padTo(pacCaller, PAC_CALLER_LENGTH, ".", true);
 			else PAC_CALLER_LENGTH = pacCaller.length();
-			System.out.println(pacCaller.substring(0, pacCaller.length() - 1) + "> " + new String(packet.getData()).trim());
+			
+			// This is here while the logging happens to the same console.
+			// TODO: Make it so they can be printed to a chose output stream.
+			if(PAC_CALLER_LENGTH < LOG_CALLER_LENGTH) PAC_CALLER_LENGTH = LOG_CALLER_LENGTH;
+			else LOG_CALLER_LENGTH = PAC_CALLER_LENGTH;
+			
+			System.out.println(pacCaller.substring(0, pacCaller.length() - 1) + " > " + message);
 		}
 	}
+	public static void logInPacket(DatagramPacket packet) {
+		logInPacket(packet.getAddress().getHostAddress(), packet.getPort() + "", new String(packet.getData()).trim());
+	}
+	public static void logInPacket(String address, String port, String message) {
+		logPacket(true, address, port, message);
+	}
+	public static void logOutPacket(DatagramPacket packet) {
+		logOutPacket(packet.getAddress().getHostAddress(), packet.getPort() + "", new String(packet.getData()).trim());
+	}
+	public static void logOutPacket(String address, String port, String message) {
+		logPacket(false, address, port, message);
+	}
+	
+	public static void error(String message, Exception e) {
+		// TODO: Insert code to print the error message
+		// This is so all errors are logged in a standardised way!
+	};
+	
 	private static boolean canLogOutput() {
-		return ArgumentOrganizer.getOrganizedArguments() == null || ArgumentOrganizer.getOrganizedArguments().boolVal("debug");
+		return ArgumentOrganizer.getOrganizedArguments() != null && ArgumentOrganizer.getOrganizedArguments().boolVal("debug");
 	}
 	
 	public static LoggerNode startSection(String section, String message) {
@@ -49,12 +72,10 @@ public class Logger {
 		currentSection.setState(true);
 		return currentSection;
 	}
-	
 	public static LoggerNode endLatestSection(String message) {
 		currentSection = endSection(currentSection, message, "");
 		return currentSection;
 	}
-	
 	public static LoggerNode endSection(String section, String message) {
 		LoggerNode ln = sectionNodes.get(section);
 		if(ln == null) {
@@ -63,7 +84,6 @@ public class Logger {
 		}
 		return endSection(ln, message, "");
 	}
-	
 	public static LoggerNode endSection(LoggerNode section, String ... message) {
 		if(section == null) {
 			Logger.log("Passed section is null!", 1);

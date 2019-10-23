@@ -124,6 +124,9 @@ public abstract class Screen {
 	public static void screenBack() {
 		MainGame.getMainGame().getDisplay().screenMan().screenBack();
 	}
+	public static Screen getCurrentScreen() {
+		return MainGame.getMainGame().getDisplay().screenMan().currentScreen();
+	}
 	
 	public static void setCameraX(long camX) {
 		Screen.CAMERA_X = camX;

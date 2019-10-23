@@ -16,12 +16,14 @@ public class StringUtil {
 		
 		// This allows us to do things like insert("{}{}{}", 1, 2, 3) => "123".
 		while(main.contains("{}")) {
-			main = main.replaceFirst("\\{\\}", values[Math.min(valIndex++, values.length - 1)].toString());
+			if(valIndex < values.length && values[valIndex] != null) main = main.replaceFirst("\\{\\}", values[Math.min(valIndex, values.length - 1)].toString());
+			else main = main.replaceFirst("\\{\\}", "null/oob");
+			valIndex++;
 		}
 		
 		for(int arrIndex = 0; arrIndex < values.length; arrIndex++) {
 			target = "{" + arrIndex + "}";
-			if(main.contains(target)) main = main.replace(target, values[arrIndex].toString());
+			if(main.contains(target) && arrIndex < values.length && values[arrIndex] != null) main = main.replace(target, values[arrIndex].toString());
 		}
 		
 		return main;
@@ -33,10 +35,23 @@ public class StringUtil {
 		return ret;
 	}
 	
-	public static String getStringList(Object[] o, String delimiter) {
+	/**
+	 * Joins all elements in the list into a single string.
+	 */
+	public static String join(Object[] o, String separator) {
 		String ret = "";
-		for(Object oo : o) ret += oo.toString() + delimiter;
-		return ret.substring(0, Math.max(0, ret.length() - delimiter.length()));
+		for(Object oo : o) ret += (oo != null ? oo.toString() : "null") + separator;
+		return ret.substring(0, Math.max(0, ret.length() - separator.length()));
+	}
+	// TODO: Make a nested join
+	/**
+	 * Joins all elements in the list into a single string.
+	 * 
+	 * @Deprecated Use {@link #join(Object[], String)} instead.
+	 */
+	@Deprecated
+	public static String getStringList(Object[] o, String delimiter) {
+		return join(o, delimiter);
 	}
 	
 	public static String padTo(String word, int amount, String padding, boolean append) {

@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 
+// FIXME: Fix the addToList and removeFromList overrides!
 public class GuiListSelector extends GuiList {
 	private static final long serialVersionUID = 1L;
 	protected boolean multiSelect;
