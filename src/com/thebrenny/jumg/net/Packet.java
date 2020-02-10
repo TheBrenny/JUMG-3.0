@@ -1,8 +1,10 @@
 package com.thebrenny.jumg.net;
 
-// Idealy this wouldn't pass strings, but the old library used strings. Maybe in
-// an update, this'll change to using packets to establish their own protocols?
-
+/*
+ * TODO:
+ * Idealy this wouldn't pass strings, but the old library used strings. Maybe in
+ * an update, this'll change to using packets to establish their own protocols?
+ */
 public abstract class Packet {
 	public static String PACKET_PREFIX = "JUMG";
 	public static String DELIMITER = ",";
@@ -29,7 +31,7 @@ public abstract class Packet {
 		if(objs != null) { // in case we have an empty packet, just send the header.
 			for(int i = 0; i < objs.length; i++) {
 				result += objs[i];
-				if(i != objs.length - 1) result += ":";
+				if(i != objs.length - 1) result += Packet.DELIMITER;
 			}
 		}
 		return result.getBytes();
@@ -42,7 +44,7 @@ public abstract class Packet {
 	public String toString() {
 		return getClass().getName() + "[" + new String(makeData()).trim() + "]";
 	}
-
+	
 	public String generatePacketHeader() {
 		return PACKET_PREFIX + packetID;
 	}
@@ -53,7 +55,7 @@ public abstract class Packet {
 	public static String retrievePacketID(String data) {
 		return data.substring(PACKET_PREFIX.length(), data.indexOf(Packet.DELIMITER));
 	}
-
+	
 	public static String generatePacketHeader(Packet packet) {
 		return packet.generatePacketHeader();
 	}

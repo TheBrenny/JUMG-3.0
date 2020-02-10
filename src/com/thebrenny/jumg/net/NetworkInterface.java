@@ -89,8 +89,10 @@ public class NetworkInterface implements Runnable {
 				
 				parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 			} catch(Exception e) {
-				Logger.log("Oh no! Something went wrong!");
-				e.printStackTrace();
+				if(e.getLocalizedMessage() == null || !e.getLocalizedMessage().equals("socket closed")) {
+					Logger.log("Oh no! Something went wrong!");
+					e.printStackTrace();
+				}
 			}
 			Arrays.fill(data, (byte) 0);
 		}
@@ -98,6 +100,11 @@ public class NetworkInterface implements Runnable {
 	}
 	
 	public void parsePacket(byte[] data, InetAddress ipAddress, int port) {
+	}
+	
+	public void stop() {
+		this.running = false;
+		socket.close();
 	}
 	
 	public void setDestination(String address, int port) {
@@ -195,6 +202,7 @@ public class NetworkInterface implements Runnable {
 		return packet != null;
 	}
 	
+	@Deprecated
 	public boolean testConnection() {
 		return testConnection2();
 		

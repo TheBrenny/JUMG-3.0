@@ -21,6 +21,17 @@ public abstract class GameClient extends NetworkInterface {
 	
 	public abstract void handlePacket(String message, InetAddress ipAddress, int port);
 	
+	public void stop() {
+		super.stop();
+		GameClient.destroyInstancedClient();
+	}
+	
+	protected static void destroyInstancedClient() {
+		INSTANCE.running = false;
+		INSTANCE.socket.close();
+		INSTANCE = null;
+	}
+
 	public static GameClient getInstance() {
 		return INSTANCE;
 	}

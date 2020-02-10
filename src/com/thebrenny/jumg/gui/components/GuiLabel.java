@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import com.thebrenny.jumg.util.MathUtil;
 
@@ -22,11 +23,13 @@ public class GuiLabel extends Component {
 	public static Font BUTTON_FONT = new Font("Terminal", Font.BOLD, 16);
 	public static Font TITLE_FONT = new Font("Terminal", Font.BOLD, 40);
 	public static Font BODY_FONT = new Font("Terminal", Font.PLAIN, 12);
+
+	public static Color DEFAULT_COLOR = Color.BLACK;
 	
 	protected float realX;
 	protected float realY;
 	
-	protected String[] string;
+	protected String[] labelStrings;
 	protected String[] allignment;
 	protected Font font;
 	protected Color color;
@@ -40,10 +43,10 @@ public class GuiLabel extends Component {
 		this.realX = x;
 		this.realY = y;
 		if(string == null) string = "";
-		this.string = string.split("\n");
+		this.labelStrings = string.split("\n");
 		if(font == null) font = BODY_FONT;
 		this.font = font;
-		this.color = Color.BLACK;
+		this.color = DEFAULT_COLOR;
 		this.allignment = ALIGN_TOP_LEFT.split(":");
 		BufferedImage bi = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -84,29 +87,25 @@ public class GuiLabel extends Component {
 	}
 	
 	public void setString(int line, String s) {
-		line = MathUtil.clamp(0, line, string.length);
-		if(line == string.length) {
-			String[] newStrings = new String[string.length + 1];
-			int i = 0;
-			for(i = 0; i < string.length; i++) newStrings[i] = string[i];
-			this.string = newStrings;
-		}
-		this.string[line] = s;
+		line = MathUtil.clamp(0, line, labelStrings.length);
+		if(line == labelStrings.length) labelStrings = Arrays.copyOf(labelStrings, labelStrings.length + 1);
+		if(labelStrings[line].equals(s)) return;
+		this.labelStrings[line] = s;
 		this.fixBounds();
 	}
 	public void insertString(int line, int pos, String s) {
-		line = MathUtil.clamp(0, line, string.length);
-		if(line == string.length) setString(line, s);
-		else string[line] = string[line].substring(0, pos) + s + string[line].substring(pos);
+		line = MathUtil.clamp(0, line, labelStrings.length);
+		if(line == labelStrings.length) setString(line, s);
+		else labelStrings[line] = labelStrings[line].substring(0, pos) + s + labelStrings[line].substring(pos);
 		this.fixBounds();
 	}
 	
 	public int getLines() {
-		return string.length;
+		return labelStrings.length;
 	}
 	public String getString(int line) {
-		line = MathUtil.clamp(0, line, string.length - 1);
-		return string[line];
+		line = MathUtil.clamp(0, line, labelStrings.length - 1);
+		return labelStrings[line];
 	}
 	public String[] getAllignment() {
 		return allignment;
@@ -129,22 +128,21 @@ public class GuiLabel extends Component {
 		return yOff;//(float) getY() - yOff;
 	}
 	public float getWidth(int line) {
-		return Math.max(1, fontMets.stringWidth(string[line]));
+		return Math.max(1, fontMets.stringWidth(labelStrings[line]));
 	}
 	public float getSingleHeight() {
 		return Math.max(1, fontMets.getHeight() + fontMets.getDescent());
 	}
 	public float getMaxWidth() {
 		float biggestString = 1;
-		for(String s : string)
-			biggestString = Math.max(fontMets.stringWidth(s), biggestString);
+		for(String s : labelStrings) biggestString = Math.max(fontMets.stringWidth(s), biggestString);
 		return biggestString;
 	}
 	public float getMaxHeight() {
-		return Math.max(1, (fontMets.getHeight() + fontMets.getDescent()) * string.length);
+		return Math.max(1, (fontMets.getHeight() + fontMets.getDescent()) * labelStrings.length);
 	}
 	public float getSubstringWidth(int line, int startPos, int endPos) {
-		return fontMets.stringWidth(string[line].substring(startPos, endPos));
+		return fontMets.stringWidth(labelStrings[line].substring(startPos, endPos));
 	}
 	
 	public BufferedImage getNewImage() {
@@ -152,12 +150,12 @@ public class GuiLabel extends Component {
 		Graphics2D g2d = bi.createGraphics();
 		g2d.setFont(this.font);
 		g2d.setColor(color);
-		for(int i = 0; i < string.length; i++) {
-			g2d.drawString(string[i], getAllignedX(i), fontMets.getHeight() * (i + 1));
+		for(int i = 0; i < labelStrings.length; i++) {
+			g2d.drawString(labelStrings[i], getAllignedX(i), fontMets.getHeight() * (i + 1));
 		}
 		return bi;
 	}
-
+	
 	public Component move(float x, float y) {
 		this.realX = x;
 		this.realY = y;
@@ -167,10 +165,14 @@ public class GuiLabel extends Component {
 	public Component translate(float x, float y) {
 		return this.move(this.realX + x, this.realY + y);
 	}
-
+	
 	public void fixBounds() {
 		this.resize(getMaxWidth(), getMaxHeight());
 		super.move(realX - getMaxAllignedX(), realY - getMaxAllignedY());
 		this.requestNewImage();
+	}
+
+	public static void setDefaultColor(Color color) {
+		GuiLabel.DEFAULT_COLOR = color;
 	}
 }

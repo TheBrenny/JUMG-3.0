@@ -25,7 +25,7 @@ public class GuiList extends Component {
 		float itemWidth = (float) (this.getWidth() - 7);
 		float itemHeight = (float) ((this.getHeight() - 7) / this.items.length);
 		for(int i = 0; i < items.length && itemCount < this.items.length; i++) {
-			this.items[itemCount] = new GuiListItem(0, itemHeight * itemCount, itemWidth, itemHeight, items[i]);
+			this.items[itemCount] = new GuiListItem(4, 4+itemHeight * itemCount, itemWidth, itemHeight, items[i]);
 			itemCount++;
 		}
 		this.requestNewImage();
@@ -48,7 +48,7 @@ public class GuiList extends Component {
 		return indexOf(value) != -1;
 	}
 	public int indexOf(String value) {
-		for(int i = 0; i < this.items.length; i++) {
+		for(int i = 0; i < itemCount; i++) {
 			if(value.equals(this.items[i].getString(0))) return i;
 		}
 		return -1;
@@ -56,6 +56,23 @@ public class GuiList extends Component {
 	public GuiListItem getItem(int index) {
 		if(index < 0 || index >= items.length) throw new IndexOutOfBoundsException();
 		return items[index];
+	}
+	public GuiListItem removeItem(int index) {
+		GuiListItem item = getItem(index);
+		removeItem(item);
+		return item;
+	}
+	public void removeItem(GuiListItem item) {
+		int index = -1;
+		for(int i = 0; i < itemCount && index == -1; i++) {
+			if(item.equals(this.items[i])) index = i;
+		}
+		
+		if(index == -1) throw new IndexOutOfBoundsException();
+		
+		items[index] = null;
+		itemCount--;
+		this.requestNewImage();
 	}
 	
 	public BufferedImage getNewImage() {
@@ -69,7 +86,7 @@ public class GuiList extends Component {
 		
 		for(GuiListItem l : this.items) {
 			if(l == null) continue;
-			l.render(g2d, 3, 3);
+			l.render(g2d, 0, 0);
 		}
 		
 		g2d.dispose();
@@ -99,12 +116,13 @@ public class GuiList extends Component {
 			this.setColor(Color.WHITE);
 		}
 		
-		public float getMaxAllignedY() {
-			float yOff = getAllignment()[1].equalsIgnoreCase(ALIGN_VERTICAL_BOTTOM) ? 1.0F : getAllignment()[1].equalsIgnoreCase(ALIGN_VERTICAL_CENTRE) ? 0.5F : 0.0F;
-			return (float) (getY() + (getMaxHeight() - getSingleHeight()) * yOff);
-		}
 		public void render(Graphics2D g2d, int xOffset, int yOffset) {
 			super.render(g2d, xOffset, yOffset);
+		}
+
+		public void requestNewImage() {
+			super.requestNewImage();
+			GuiList.this.requestNewImage();
 		}
 	}
 }

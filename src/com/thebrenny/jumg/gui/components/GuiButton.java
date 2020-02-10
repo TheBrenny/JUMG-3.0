@@ -1,5 +1,6 @@
 package com.thebrenny.jumg.gui.components;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -17,7 +18,7 @@ public class GuiButton extends Component {
 	
 	public GuiButton(float x, float y, float width, float height, String str, Runnable run) {
 		super(x, y, width, height, run);
-		this.label = new GuiLabel((float) getWidth() / 2, (float) getHeight() / 2, str, GuiLabel.BUTTON_FONT).align(GuiLabel.ALIGN_CENTRE);
+		this.label = new GuiLabel((float) getWidth() / 2, (float) getHeight() / 2, str, GuiLabel.BUTTON_FONT).setColor(Color.BLACK).align(GuiLabel.ALIGN_CENTRE);
 	}
 	
 	public GuiButton move(float x, float y) {

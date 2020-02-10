@@ -55,6 +55,6 @@ public abstract class Message {
 		return Objects.hash(sender, receiver, id, data, timestamp, delay);
 	}
 	public String toString() {
-		return "Message{sender:" + sender + ", receiver:" + receiver + ", id:" + id + ", timestamp:" + timestamp + ", delay:" + delay + ", data:[" + StringUtil.getStringList(data, ", ") + "]}";
+		return "Message{sender:" + sender + ", receiver:" + receiver + ", id:" + id + ", timestamp:" + timestamp + ", delay:" + delay + ", data:[" + StringUtil.join(data, ", ") + "]}";
 	}
 }

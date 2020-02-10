@@ -23,13 +23,14 @@ public abstract class GameServer extends NetworkInterface {
 	
 	public GameServer(String host) {
 		super(null, -1, DEFAULT_PORT);
-		if(GameServer.INSTANCE == null) GameServer.INSTANCE = this;
-		else Logger.log("A GameServer is already running! Is this a mistake?");
-		String tmp = this.getDomainSrcAddress();
-		tmp = tmp != null ? tmp : this.getLANSrcAddress();
-		String serverIP = tmp == null ? "127.0.0.1" : tmp;
-		int port = this.getSrcPort();
-		this.serverInfo = new ServerInfo(host, serverIP, port);
+		if(GameServer.INSTANCE == null) {
+			GameServer.INSTANCE = this;
+			String tmp = this.getDomainSrcAddress();
+			tmp = tmp != null ? tmp : this.getLANSrcAddress();
+			String serverIP = tmp == null ? "127.0.0.1" : tmp;
+			int port = this.getSrcPort();
+			this.serverInfo = new ServerInfo(host, serverIP, port);
+		} else Logger.log(" --- A GameServer is already running! Is this a mistake?");
 	}
 	/**
 	 * Sets the connection packet ID, to exclusively allow only incoming packets
@@ -89,7 +90,7 @@ public abstract class GameServer extends NetworkInterface {
 			return false;
 		}
 	}
-
+	
 	public void sendPacket(Packet packet) {
 		Logger.log("You need to specify a destination to send to! Use sendPacket(Packet, InetAddress, int)!", 1);
 	}
@@ -97,10 +98,17 @@ public abstract class GameServer extends NetworkInterface {
 		sendDataToAll(packet.makeData());
 	}
 	public void sendDataToAll(byte[] data) {
-		for(NetworkInterface ni : allConnections) sendData(data, ni.getDestAddress(), ni.getDestPort());
+		for(NetworkInterface ni : allConnections.toArray(new NetworkInterface[allConnections.size()])) sendData(data, ni.getDestAddress(), ni.getDestPort());
 	}
 	
-	public static void destroyInstancedServer() {
+	public abstract void disconnectAllConnections();
+	
+	public void stop() {
+		super.stop();
+		GameServer.destroyInstancedServer();
+	}
+	
+	protected static void destroyInstancedServer() {
 		INSTANCE.running = false;
 		INSTANCE.allConnections = null;
 		INSTANCE.serverInfo = null;

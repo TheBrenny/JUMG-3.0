@@ -25,18 +25,24 @@ public class Logger {
 			String logCaller = "[" + ste.getClassName().substring(ste.getClassName().lastIndexOf(".") + 1) + "." + ste.getMethodName() + "] ";
 			if(logCaller.length() < LOG_CALLER_LENGTH) logCaller = StringUtil.padTo(logCaller, LOG_CALLER_LENGTH, ".", true);
 			else LOG_CALLER_LENGTH = logCaller.length();
+			
+			// This is here while the logging happens to the same console.
+			// TODO: Make it so they can be printed to a chosen output stream.
+			if(PAC_CALLER_LENGTH < LOG_CALLER_LENGTH) PAC_CALLER_LENGTH = LOG_CALLER_LENGTH;
+			else LOG_CALLER_LENGTH = PAC_CALLER_LENGTH;
+			
 			System.out.println(logCaller.substring(0, logCaller.length() - 1) + " > " + message);
 		}
 	}
 	
 	public static void logPacket(boolean inbound, String address, String port, String message) {
 		if(canLogOutput()) {
-			String pacCaller = "[" + (inbound ? "IN FROM " : "OUT TO  ") + address + ":" + port + "] ";
+			String pacCaller = "[" + (inbound ? "IN FROM " : "OUT TO  ") + address + ":" + port + "] "; // Change colours as well
 			if(pacCaller.length() < PAC_CALLER_LENGTH) pacCaller = StringUtil.padTo(pacCaller, PAC_CALLER_LENGTH, ".", true);
 			else PAC_CALLER_LENGTH = pacCaller.length();
 			
 			// This is here while the logging happens to the same console.
-			// TODO: Make it so they can be printed to a chose output stream.
+			// TODO: Make it so they can be printed to a chosen output stream.
 			if(PAC_CALLER_LENGTH < LOG_CALLER_LENGTH) PAC_CALLER_LENGTH = LOG_CALLER_LENGTH;
 			else LOG_CALLER_LENGTH = PAC_CALLER_LENGTH;
 			
