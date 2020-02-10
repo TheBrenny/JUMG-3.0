@@ -4,8 +4,12 @@
 
 ### Contents
  1. What is JUMG?
+    1. JUMG Development Checklist
  2. Demo Game
  3. How to use JUMG
+    1. ~Some Packages~
+    2. Full Library
+    3. Quick Start
  4. Extra Notes
 <hr>
 
@@ -39,21 +43,15 @@ As JUMG is in development, it is necessary for a checklist to be made of what ne
  21. [ ] Full JavaDocs
  22. [ ] RELEASE!
 
-> Currently I'm working on my project for Uni while I continue to work on JUMG. This is because my project depends on JUMG. As I work through, changes will occur and enhancements will be made, thus making the changes on this list seem eratic. Just bear with me. :ok_hand:
+> My Uni course has finally come to an end! I've made that project dormant while I continue to work on this library so I am able to quickly prototype new ideas and expend on my knowledge of game development from the ground up. Therefore, changes on this list may seem eratic. Just bear with me. :ok_hand:
 
-### Demo Game
-Check out the demo game which is a project for my Computer Games course at Uni, [BattleCell](https://github.com/TheBrenny/BattleCell)!
+### Demo Games
+- [BattleCell](https://github.com/TheBrenny/BattleCell) - Check out the demo game which ~is~ was a project for my Computer Games course at Uni!
+- [th3 d33p](https://github.com/TheBrenny/th3-d33p) - Here's a new demo game called '_th3 d33p_' which is a realtime-roguelike game similar to Runescape's old Dungeoneering minigame.
 
 ### How to use JUMG
 
-#### ~If you only want some packages:~
- 1. ~Copy the `com.thebrenny.jumg.utils` package to your workspace.~
- 2. ~Copy your wanted packages across.~
- 3. ~The packages should be available for use!~
-
-_This isn't actually possible. Dependencies are everywhere throughout the project._
-
-#### If you want the full library:
+#### Create a library dependency
  1. Eclipse
     1. Make sure the JUMG Library is a project in your workspace.
     2. Right Click your project > "Build Path" > "Configure Build Path..."
@@ -66,6 +64,12 @@ _This isn't actually possible. Dependencies are everywhere throughout the projec
     3. You should now be able to use and modify JUMG!
 
 Note that these methods allow you to alter the packages, for your own personalization benefits, or to improve on JUMG. If you do make an improvement or addition that is not personalized, **submit a PR!**
+
+#### Quick Start
+
+Copy the content of [QuickStart.java](src/QuickStart.java) into your game's execution point (the main Java file) and follow the comments to get started.
+
+Also look at the various [demo games](#demo-games) above to find out where to go from there.
 
 ### Extra Notes
 JUMG is an open source tool that is freely available for modifications. Take it and throw it into eclipse, but remember that it would be nice that if you muddle around with it, that if you could throw a push request to the current JUMG build, here on GitHub.

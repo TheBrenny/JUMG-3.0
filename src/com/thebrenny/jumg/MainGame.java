@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseMotionListener;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -53,6 +54,7 @@ public abstract class MainGame {
 	protected Handler handler;
 	protected Engine engine;
 	protected int engineTicks = 60;
+	protected String username = System.getProperty("user.name", "Player" + new Random().nextLong());
 	
 	protected boolean debugging = false;
 	protected boolean running = false;
@@ -321,6 +323,28 @@ public abstract class MainGame {
 	public GameInfo getGameInfo() {
 		return gameInfo;
 	}
+	
+	/**
+	 * Returns the username of the player. Set to
+	 * {@code System.getProperty("user.name")}, unless changed by using
+	 * {@link #setUsername(String)}.
+	 * 
+	 * @return The username of the player.
+	 */
+	public String getUsername() {
+		return this.username;
+	}
+	
+	/**
+	 * Sets the username of the player.
+	 * 
+	 * @param username
+	 *        - The new username to use.
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 	/**
 	 * Returns the current instance of the game. This should be overridden to
 	 * return the actual class object of the extended class.
